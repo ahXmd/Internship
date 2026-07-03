@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevate — Creative Digital Agency</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #5028C6;
+            --accent: #F97316;
+            --dark: #0F172A;
+            --darker: #020617;
+            --light: #F8FAFC;
+            --gray: #94A3B8;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--darker);
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        /* ─── Animated Gradient Background ─── */
+        .hero-gradient {
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 60, 225, 0.3), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(249, 115, 22, 0.15), transparent),
+                radial-gradient(ellipse 50% 50% at 20% 80%, rgba(108, 60, 225, 0.2), transparent);
+        }
+
+        /* ─── Floating Orbs ─── */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #6C3CE1; top: -100px; right: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: #F97316; bottom: -50px; left: -80px; animation-delay: 2s; }
+        .orb-3 { width: 200px; height: 200px; background: #3B82F6; top: 40%; left: 60%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        /* ─── Glass Card ─── */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 60, 225, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(108, 60, 225, 0.15);
+        }
+
+        /* ─── Gradient Text ─── */
+        .gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 0%, #A78BFA 50%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-small {
+            background: linear-gradient(135deg, #A78BFA, #F97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ─── Buttons ─── */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C3CE1, #8B5CF6);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .btn-outline:hover {
+            border-color: #6C3CE1;
+            background: rgba(108, 60, 225, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ─── Navigation ─── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 0;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6C3CE1, #F97316);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .nav-link:hover::after { width: 60%; }
+
+        /* ─── Stat Counter ─── */
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        /* ─── Section Divider ─── */
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #6C3CE1, #F97316);
+            border-radius: 4px;
+            margin: 16px auto 0;
+        }
+
+        /* ─── Feature Icon ─── */
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(108, 60, 225, 0.2), rgba(249, 115, 22, 0.1));
+            border: 1px solid rgba(108, 60, 225, 0.2);
+        }
+
+        /* ─── Testimonial ─── */
+        .testimonial-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 120px;
+            font-family: 'Playfair Display', serif;
+            color: rgba(108, 60, 225, 0.1);
+            line-height: 1;
+        }
+
+        /* ─── Pricing ─── */
+        .pricing-card.featured {
+            border-color: rgba(108, 60, 225, 0.5);
+            background: linear-gradient(180deg, rgba(108, 60, 225, 0.1), rgba(2, 6, 23, 0.5));
+        }
+        .pricing-badge {
+            background: linear-gradient(135deg, #6C3CE1, #F97316);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* ─── Scroll Animation ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── Image Glow ─── */
+        .img-glow {
+            position: relative;
+        }
+        .img-glow::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 0 0 60px rgba(108, 60, 225, 0.2);
+            pointer-events: none;
+        }
+
+        /* ─── Footer ─── */
+        .footer-link {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+        .footer-link:hover { color: #A78BFA; }
+
+        /* ─── Marquee ─── */
+        .marquee-track {
+            display: flex;
+            animation: marquee 20s linear infinite;
+            gap: 60px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ─── Custom Scrollbar ─── */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* ─── Mobile Menu ─── */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 360px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 80px 40px 40px;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .mobile-menu.open { right: 0; }
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mobile-overlay.open { opacity: 1; pointer-events: all; }
+
+        .mobile-nav-link {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 600;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: color 0.3s ease;
+        }
+        .mobile-nav-link:hover { color: #A78BFA; }
+
+        /* ─── Grid Pattern ─── */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════ NAVIGATION ═══════════════════════ -->
+    <nav class="navbar" id="navbar">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <!-- Logo -->
+            <a href="#" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #6C3CE1, #F97316); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+                        <line x1="12" y1="22" x2="12" y2="15.5"/>
+                        <polyline points="22 8.5 12 15.5 2 8.5"/>
+                    </svg>
+                </div>
+                <span style="color: white; font-weight: 800; font-size: 22px; letter-spacing: -0.5px;">Elevate</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div style="display: flex; align-items: center; gap: 4px;" class="hidden md:flex">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#testimonials" class="nav-link">Testimonials</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+
+            <!-- CTA Button -->
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="#pricing" class="btn-primary hidden md:inline-flex" style="padding: 12px 28px; font-size: 14px;">
+                    Get Started
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMenu()" style="background: none; border: none; color: white; cursor: pointer; padding: 8px;" class="md:hidden">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button onclick="toggleMenu()" style="position: absolute; top: 24px; right: 24px; background: none; border: none; color: white; cursor: pointer;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <a href="#features" class="mobile-nav-link" onclick="toggleMenu()">Features</a>
+        <a href="#about" class="mobile-nav-link" onclick="toggleMenu()">About</a>
+        <a href="#testimonials" class="mobile-nav-link" onclick="toggleMenu()">Testimonials</a>
+        <a href="#pricing" class="mobile-nav-link" onclick="toggleMenu()">Pricing</a>
+        <a href="#contact" class="mobile-nav-link" onclick="toggleMenu()">Contact</a>
+        <a href="#pricing" class="btn-primary" style="margin-top: 32px; justify-content: center; width: 100%;">Get Started</a>
+    </div>
+
+    <!-- ═══════════════════════ HERO SECTION ═══════════════════════ -->
+    <section class="hero-gradient grid-pattern" style="min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 100px;">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 10; width: 100%;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center;" class="lg:!grid-cols-2">
+                <!-- Left Content -->
+                <div>
+                    <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(108, 60, 225, 0.15); border: 1px solid rgba(108, 60, 225, 0.3); padding: 8px 20px; border-radius: 50px; margin-bottom: 28px; font-size: 14px; font-weight: 500;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #6C3CE1; display: inline-block; animation: pulse 2s infinite;"></span>
+                        <span style="color: #A78BFA;">Now Accepting New Clients for 2026</span>
+                    </div>
+
+                    <h1 style="font-size: clamp(40px, 6vw, 72px); font-weight: 700; line-height: 1.08; letter-spacing: -2px; margin-bottom: 24px;">
+                        We Build<br>
+                        <span class="gradient-text">Digital Experiences</span><br>
+                        That Matter
+                    </h1>
+
+                    <p style="font-size: 18px; line-height: 1.7; color: var(--gray); max-width: 520px; margin-bottom: 40px;">
+                        A full-service creative agency crafting award-winning websites, brands, and digital products that drive real results for ambitious companies.
+                    </p>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 50px;">
+                        <a href="#pricing" class="btn-primary">
+                            Start Your Project
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        <a href="#about" class="btn-outline">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                            Watch Showreel
+                        </a>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                        <div style="display: flex;">
+                            <img src="https://images.pexels.com/photos/14950779/pexels-photo-14950779.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--darker); object-fit: cover;">
+                            <img src="https://images.pexels.com/photos/7640433/pexels-photo-7640433.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--darker); object-fit: cover; margin-left: -10px;">
+                            <img src="https://images.pexels.com/photos/28280965/pexels-photo-28280965.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--darker); object-fit: cover; margin-left: -10px;">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--darker); background: linear-gradient(135deg, #6C3CE1, #F97316); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-left: -10px; color: white;">
+                                +50
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; gap: 2px; margin-bottom: 2px;">
+                                <span style="color: #FBBF24;">★</span><span style="color: #FBBF24;">★</span><span style="color: #FBBF24;">★</span><span style="color: #FBBF24;">★</span><span style="color: #FBBF24;">★</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--gray);">Rated 4.9/5 by 200+ clients</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content: Hero Image -->
+                <div style="position: relative;" class="hidden lg:block">
+                    <div class="img-glow" style="border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                        <img src="https://images.pexels.com/photos/1181304/pexels-photo-1181304.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="Team collaboration" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
+                    </div>
+                    <!-- Floating Badge -->
+                    <div class="glass-card" style="position: absolute; bottom: -20px; left: -30px; padding: 20px 28px; border-radius: 16px; display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10B981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 18px; color: white;">150+ Projects</div>
+                            <div style="font-size: 13px; color: var(--gray);">Successfully Delivered</div>
+                        </div>
+                    </div>
+                    <!-- Floating Badge 2 -->
+                    <div class="glass-card" style="position: absolute; top: 20px; right: -20px; padding: 16px 24px; border-radius: 16px;">
+                        <div style="font-size: 13px; color: var(--gray); margin-bottom: 4px;">Avg. ROI Increase</div>
+                        <div style="font-weight: 800; font-size: 28px; color: #10B981;">+340%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ BRAND MARQUEE ═══════════════════════ -->
+    <section style="padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden;">
+        <p style="text-align: center; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; color: var(--gray); margin-bottom: 32px; font-weight: 500;">Trusted by Industry Leaders</p>
+        <div style="overflow: hidden; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 120px; background: linear-gradient(90deg, var(--darker), transparent); z-index: 2;"></div>
+            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 120px; background: linear-gradient(270deg, var(--darker), transparent); z-index: 2;"></div>
+            <div class="marquee-track" style="width: max-content;">
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">GOOGLE</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">MICROSOFT</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">AMAZON</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">SPOTIFY</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">NETFLIX</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">STRIPE</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">AIRBNB</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">SLACK</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">GOOGLE</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">MICROSOFT</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">AMAZON</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">SPOTIFY</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">NETFLIX</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">STRIPE</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">AIRBNB</span>
+                <span style="font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.12); white-space: nowrap; letter-spacing: -1px;">SLACK</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FEATURES SECTION ═══════════════════════ -->
+    <section id="features" style="padding: 120px 0; position: relative;" class="grid-pattern">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+            <!-- Section Header -->
+            <div class="reveal" style="text-align: center; max-width: 640px; margin: 0 auto 80px;">
+                <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600;" class="gradient-text-small">What We Do</span>
+                <h2 style="font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-top: 12px; color: white; letter-spacing: -1px;">
+                    Services Built for Growth
+                </h2>
+                <div class="section-divider"></div>
+                <p style="margin-top: 20px; color: var(--gray); font-size: 17px; line-height: 1.7;">
+                    We combine strategy, design, and technology to create digital products that deliver measurable results.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px;">
+                <!-- Feature 1 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">🎨</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">UI/UX Design</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Beautiful, intuitive interfaces crafted through user research, wireframing, and iterative prototyping that delight users.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">⚡</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">Web Development</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Blazing-fast, responsive websites built with modern frameworks and best practices for optimal performance.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">📱</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">Mobile Apps</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Native and cross-platform mobile applications that engage users and extend your brand across all devices.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">🚀</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">Brand Strategy</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Strategic brand development that positions you uniquely in the market with compelling narratives and identity.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">📊</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">SEO & Analytics</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Data-driven optimization strategies that boost your visibility and convert traffic into loyal customers.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: white; margin-bottom: 12px; font-family: 'Inter', sans-serif;">Cloud & DevOps</h3>
+                    <p style="color: var(--gray); line-height: 1.7; font-size: 15px;">
+                        Scalable cloud infrastructure with CI/CD pipelines ensuring your applications run reliably at any scale.
+                    </p>
+                    <a href="#" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; color: #A78BFA; text-decoration: none; font-weight: 500; font-size: 14px; transition: gap 0.3s ease;" onmouseenter="this.style.gap='12px'" onmouseleave="this.style.gap='6px'">
+                        Learn More
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ ABOUT / STATS SECTION ═══════════════════════ -->
+    <section id="about" style="padding: 120px 0; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(108, 60, 225, 0.08), transparent);"></div>
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 10;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 80px; align-items: center;" class="lg:!grid-cols-2">
+                <!-- Image Grid -->
+                <div class="reveal" style="position: relative;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                            <img src="https://images.pexels.com/photos/6803550/pexels-photo-6803550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="Office setup" style="width: 100%; height: 260px; object-fit: cover; display: block;">
+                        </div>
+                        <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-top: 40px;">
+                            <img src="https://images.pexels.com/photos/7792859/pexels-photo-7792859.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="Team meeting" style="width: 100%; height: 260px; object-fit: cover; display: block;">
+                        </div>
+                        <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-top: -40px;">
+                            <img src="https://images.pexels.com/photos/1279109/pexels-photo-1279109.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="Workspace" style="width: 100%; height: 260px; object-fit: cover; display: block;">
+                        </div>
+                        <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+                            <img src="https://images.pexels.com/photos/8297442/pexels-photo-8297442.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="Team" style="width: 100%; height: 260px; object-fit: cover; display: block;">
+                        </div>
+                    </div>
+                    <!-- Experience Badge -->
+                    <div class="glass-card" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 24px 32px; border-radius: 20px; text-align: center;">
+                        <div style="font-size: 48px; font-weight: 800; color: white; font-family: 'Playfair Display', serif;" class="gradient-text">8+</div>
+                        <div style="font-size: 14px; color: var(--gray); font-weight: 500;">Years of<br>Excellence</div>
+                    </div>
+                </div>
+
+                <!-- Text Content -->
+                <div class="reveal">
+                    <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600;" class="gradient-text-small">About Elevate</span>
+                    <h2 style="font-size: clamp(28px, 4vw, 44px); font-weight: 700; margin-top: 12px; color: white; letter-spacing: -1px; line-height: 1.15;">
+                        Crafting Digital Excellence Since 2018
+                    </h2>
+                    <p style="margin-top: 24px; color: var(--gray); font-size: 16px; line-height: 1.8;">
+                        We're a team of passionate designers, developers, and strategists who believe in the power of thoughtful design and clean code. Every project starts with understanding your vision and ends with exceeding your expectations.
+                    </p>
+                    <p style="margin-top: 16px; color: var(--gray); font-size: 16px; line-height: 1.8;">
+                        Our approach combines human-centered design thinking with cutting-edge technology to create solutions that are as beautiful as they are functional.
+                    </p>
+
+                    <!-- Checkmarks -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span style="font-size: 14px; color: #CBD5E1;">Agile Methodology</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span style="font-size: 14px; color: #CBD5E1;">24/7 Support</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span style="font-size: 14px; color: #CBD5E1;">100% On-Time Delivery</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span style="font-size: 14px; color: #CBD5E1;">Transparent Pricing</span>
+                        </div>
+                    </div>
+
+                    <a href="#contact" class="btn-primary" style="margin-top: 36px;">
+                        Work With Us
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="reveal" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 100px; padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02);">
+                <div class="stat-item">
+                    <div class="stat-number gradient-text" data-target="150">0</div>
+                    <div style="color: var(--gray); font-size: 15px; margin-top: 8px;">Projects Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number gradient-text" data-target="50">0</div>
+                    <div style="color: var(--gray); font-size: 15px; margin-top: 8px;">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number gradient-text" data-target="25">0</div>
+                    <div style="color: var(--gray); font-size: 15px; margin-top: 8px;">Team Members</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number gradient-text" data-target="12">0</div>
+                    <div style="color: var(--gray); font-size: 15px; margin-top: 8px;">Industry Awards</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ TESTIMONIALS ═══════════════════════ -->
+    <section id="testimonials" style="padding: 120px 0; position: relative; background: linear-gradient(180deg, transparent, rgba(108, 60, 225, 0.04), transparent);">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+            <!-- Section Header -->
+            <div class="reveal" style="text-align: center; max-width: 640px; margin: 0 auto 80px;">
+                <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600;" class="gradient-text-small">Testimonials</span>
+                <h2 style="font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-top: 12px; color: white; letter-spacing: -1px;">
+                    What Our Clients Say
+                </h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <!-- Testimonials Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 28px;">
+                <!-- Testimonial 1 -->
+                <div class="glass-card testimonial-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div style="display: flex; gap: 2px; margin-bottom: 20px;">
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                    </div>
+                    <p style="color: #CBD5E1; font-size: 16px; line-height: 1.8; margin-bottom: 28px;">
+                        "Elevate completely transformed our digital presence. Their team delivered a website that not only looks incredible but also increased our conversions by 280%. Truly exceptional work."
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="https://images.pexels.com/photos/14950779/pexels-photo-14950779.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(108, 60, 225, 0.3);">
+                        <div>
+                            <div style="font-weight: 600; color: white; font-size: 15px;">Marcus Chen</div>
+                            <div style="font-size: 13px; color: var(--gray);">CEO, TechFlow Inc.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="glass-card testimonial-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div style="display: flex; gap: 2px; margin-bottom: 20px;">
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                    </div>
+                    <p style="color: #CBD5E1; font-size: 16px; line-height: 1.8; margin-bottom: 28px;">
+                        "Working with Elevate was a game-changer. They understood our brand instantly and created an experience that our customers absolutely love. I can't recommend them enough."
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="https://images.pexels.com/photos/7640433/pexels-photo-7640433.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(108, 60, 225, 0.3);">
+                        <div>
+                            <div style="font-weight: 600; color: white; font-size: 15px;">Sarah Williams</div>
+                            <div style="font-size: 13px; color: var(--gray);">Founder, Bloom Studio</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="glass-card testimonial-card reveal" style="padding: 40px 36px; border-radius: 20px;">
+                    <div style="display: flex; gap: 2px; margin-bottom: 20px;">
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                        <span style="color: #FBBF24; font-size: 18px;">★</span>
+                    </div>
+                    <p style="color: #CBD5E1; font-size: 16px; line-height: 1.8; margin-bottom: 28px;">
+                        "The attention to detail is remarkable. Every pixel, every interaction was meticulously crafted. Our mobile app received rave reviews and climbed to top 10 in its category."
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="https://images.pexels.com/photos/28280965/pexels-photo-28280965.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(108, 60, 225, 0.3);">
+                        <div>
+                            <div style="font-weight: 600; color: white; font-size: 15px;">Amara Johnson</div>
+                            <div style="font-size: 13px; color: var(--gray);">CTO, NexaVenture</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ PRICING SECTION ═══════════════════════ -->
+    <section id="pricing" style="padding: 120px 0; position: relative;" class="grid-pattern">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+            <!-- Section Header -->
+            <div class="reveal" style="text-align: center; max-width: 640px; margin: 0 auto 80px;">
+                <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600;" class="gradient-text-small">Pricing</span>
+                <h2 style="font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-top: 12px; color: white; letter-spacing: -1px;">
+                    Simple, Transparent Pricing
+                </h2>
+                <div class="section-divider"></div>
+                <p style="margin-top: 20px; color: var(--gray); font-size: 17px; line-height: 1.7;">
+                    Choose the plan that fits your needs. No hidden fees, no surprises.
+                </p>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; max-width: 1080px; margin: 0 auto;">
+                <!-- Starter -->
+                <div class="glass-card pricing-card reveal" style="padding: 44px 36px; border-radius: 24px; display: flex; flex-direction: column;">
+                    <h3 style="font-size: 20px; font-weight: 600; color: white; margin-bottom: 8px; font-family: 'Inter', sans-serif;">Starter</h3>
+                    <p style="font-size: 14px; color: var(--gray); margin-bottom: 28px;">Perfect for small businesses just getting started</p>
+                    <div style="margin-bottom: 32px;">
+                        <span style="font-size: 52px; font-weight: 800; color: white; font-family: 'Playfair Display', serif;">$2,499</span>
+                        <span style="color: var(--gray); font-size: 15px;"> / project</span>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">5-Page Responsive Website</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Basic SEO Setup</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Contact Form Integration</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">2 Rounds of Revisions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">30-Day Support</span>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn-outline" style="margin-top: 28px; justify-content: center; width: 100%;">Choose Starter</a>
+                </div>
+
+                <!-- Professional (Featured) -->
+                <div class="glass-card pricing-card featured reveal" style="padding: 44px 36px; border-radius: 24px; display: flex; flex-direction: column; position: relative;">
+                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%);">
+                        <span class="pricing-badge">Most Popular</span>
+                    </div>
+                    <h3 style="font-size: 20px; font-weight: 600; color: white; margin-bottom: 8px; font-family: 'Inter', sans-serif;">Professional</h3>
+                    <p style="font-size: 14px; color: var(--gray); margin-bottom: 28px;">For growing brands that need a competitive edge</p>
+                    <div style="margin-bottom: 32px;">
+                        <span style="font-size: 52px; font-weight: 800; color: white; font-family: 'Playfair Display', serif;">$6,999</span>
+                        <span style="color: var(--gray); font-size: 15px;"> / project</span>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">15-Page Custom Website</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Advanced SEO & Analytics</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">CMS Integration</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Unlimited Revisions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">90-Day Priority Support</span>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn-primary" style="margin-top: 28px; justify-content: center; width: 100%;">Choose Professional</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="glass-card pricing-card reveal" style="padding: 44px 36px; border-radius: 24px; display: flex; flex-direction: column;">
+                    <h3 style="font-size: 20px; font-weight: 600; color: white; margin-bottom: 8px; font-family: 'Inter', sans-serif;">Enterprise</h3>
+                    <p style="font-size: 14px; color: var(--gray); margin-bottom: 28px;">Full-scale solutions for established enterprises</p>
+                    <div style="margin-bottom: 32px;">
+                        <span style="font-size: 52px; font-weight: 800; color: white; font-family: 'Playfair Display', serif;">Custom</span>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Fully Custom Platform</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Dedicated Project Team</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">API & Third-Party Integrations</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">Performance Optimization</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="font-size: 14px; color: #CBD5E1;">12-Month Retainer Support</span>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn-outline" style="margin-top: 28px; justify-content: center; width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ CTA SECTION ═══════════════════════ -->
+    <section id="contact" style="padding: 120px 0; position: relative; overflow: hidden;">
+        <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(108, 60, 225, 0.15), transparent);"></div>
+        <div style="max-width: 800px; margin: 0 auto; padding: 0 24px; text-align: center; position: relative; z-index: 10;">
+            <div class="reveal">
+                <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600;" class="gradient-text-small">Ready to Start?</span>
+                <h2 style="font-size: clamp(32px, 5vw, 56px); font-weight: 700; margin-top: 12px; color: white; letter-spacing: -1px; line-height: 1.15;">
+                    Let's Build Something<br><span class="gradient-text">Extraordinary Together</span>
+                </h2>
+                <p style="margin-top: 24px; color: var(--gray); font-size: 18px; line-height: 1.7; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Ready to transform your digital presence? Get in touch and let's discuss how we can bring your vision to life.
+                </p>
+
+                <!-- Contact Form -->
+                <div class="glass-card" style="padding: 48px 40px; border-radius: 24px; margin-top: 48px; text-align: left;">
+                    <form onsubmit="handleSubmit(event)" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: #CBD5E1; margin-bottom: 8px;">First Name</label>
+                            <input type="text" placeholder="John" required style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#6C3CE1'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: #CBD5E1; margin-bottom: 8px;">Last Name</label>
+                            <input type="text" placeholder="Doe" required style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#6C3CE1'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: #CBD5E1; margin-bottom: 8px;">Email</label>
+                            <input type="email" placeholder="john@company.com" required style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#6C3CE1'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <label style="display: block; font-size: 13px; font-weight: 500; color: #CBD5E1; margin-bottom: 8px;">Tell us about your project</label>
+                            <textarea rows="4" placeholder="I need a new website for my..." required style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; resize: vertical; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='#6C3CE1'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <button type="submit" class="btn-primary" id="submitBtn" style="width: 100%; justify-content: center; font-size: 16px; padding: 18px;">
+                                Send Message
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="successMsg" style="display: none; text-align: center; padding: 24px;">
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <h3 style="font-size: 22px; font-weight: 700; color: white; margin-bottom: 8px; font-family: 'Inter', sans-serif;">Message Sent!</h3>
+                        <p style="color: var(--gray); font-size: 15px;">We'll get back to you within 24 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+    <footer style="border-top: 1px solid rgba(255,255,255,0.05); padding: 80px 0 40px;">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; margin-bottom: 60px;">
+                <!-- Brand Column -->
+                <div style="max-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #6C3CE1, #F97316); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+                                <line x1="12" y1="22" x2="12" y2="15.5"/>
+                                <polyline points="22 8.5 12 15.5 2 8.5"/>
+                            </svg>
+                        </div>
+                        <span style="color: white; font-weight: 800; font-size: 20px;">Elevate</span>
+                    </div>
+                    <p style="color: var(--gray); font-size: 14px; line-height: 1.7;">
+                        A full-service creative agency crafting digital experiences that drive results. Based in San Francisco, serving clients worldwide.
+                    </p>
+                    <!-- Social Links -->
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <a href="#" style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--gray); text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);" onmouseenter="this.style.background='rgba(108,60,225,0.2)';this.style.color='#A78BFA';this.style.borderColor='rgba(108,60,225,0.3)'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--gray)';this.style.borderColor='rgba(255,255,255,0.05)'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--gray); text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);" onmouseenter="this.style.background='rgba(108,60,225,0.2)';this.style.color='#A78BFA';this.style.borderColor='rgba(108,60,225,0.3)'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--gray)';this.style.borderColor='rgba(255,255,255,0.05)'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <a href="#" style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--gray); text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);" onmouseenter="this.style.background='rgba(108,60,225,0.2)';this.style.color='#A78BFA';this.style.borderColor='rgba(108,60,225,0.3)'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--gray)';this.style.borderColor='rgba(255,255,255,0.05)'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                        </a>
+                        <a href="#" style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--gray); text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);" onmouseenter="this.style.background='rgba(108,60,225,0.2)';this.style.color='#A78BFA';this.style.borderColor='rgba(108,60,225,0.3)'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--gray)';this.style.borderColor='rgba(255,255,255,0.05)'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="font-size: 15px; font-weight: 600; color: white; margin-bottom: 20px; font-family: 'Inter', sans-serif;">Company</h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="#about" class="footer-link">About Us</a>
+                        <a href="#" class="footer-link">Careers</a>
+                        <a href="#" class="footer-link">Blog</a>
+                        <a href="#contact" class="footer-link">Contact</a>
+                        <a href="#" class="footer-link">Partners</a>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 style="font-size: 15px; font-weight: 600; color: white; margin-bottom: 20px; font-family: 'Inter', sans-serif;">Services</h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="#features" class="footer-link">Web Design</a>
+                        <a href="#features" class="footer-link">Development</a>
+                        <a href="#features" class="footer-link">Mobile Apps</a>
+                        <a href="#features" class="footer-link">Branding</a>
+                        <a href="#features" class="footer-link">SEO</a>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 style="font-size: 15px; font-weight: 600; color: white; margin-bottom: 20px; font-family: 'Inter', sans-serif;">Stay Updated</h4>
+                    <p style="color: var(--gray); font-size: 14px; line-height: 1.6; margin-bottom: 16px;">Subscribe to our newsletter for the latest insights and tips.</p>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="email" placeholder="your@email.com" style="flex: 1; padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-size: 14px; font-family: 'Inter', sans-serif; outline: none;" onfocus="this.style.borderColor='#6C3CE1'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        <button style="padding: 12px 18px; border-radius: 10px; border: none; background: linear-gradient(135deg, #6C3CE1, #8B5CF6); color: white; cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+                <p style="color: var(--gray); font-size: 13px;">© 2026 Elevate Agency. All rights reserved.</p>
+                <div style="display: flex; gap: 24px;">
+                    <a href="#" class="footer-link" style="font-size: 13px;">Privacy Policy</a>
+                    <a href="#" class="footer-link" style="font-size: 13px;">Terms of Service</a>
+                    <a href="#" class="footer-link" style="font-size: 13px;">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════ BACK TO TOP ═══════════════════════ -->
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="position: fixed; bottom: 32px; right: 32px; width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #6C3CE1, #8B5CF6); border: none; color: white; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 999; box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4); transition: all 0.3s ease;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+    <script>
+        // ── Navbar Scroll Effect ──
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ── Back to Top Button ──
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.style.display = 'flex';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+
+        // ── Mobile Menu Toggle ──
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('mobileOverlay').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
+
+        // ── Scroll Reveal Animations ──
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ── Counter Animation ──
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.dataset.target);
+                    let current = 0;
+                    const increment = target / 60;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            entry.target.textContent = target + '+';
+                            clearInterval(timer);
+                        } else {
+                            entry.target.textContent = Math.floor(current) + '+';
+                        }
+                    }, 25);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(el => counterObserver.observe(el));
+
+        // ── Smooth Scroll for Anchor Links ──
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ── Form Submit Handler ──
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const btn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMsg');
+
+            btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation: spin 1s linear infinite;"><path d="M12 2a10 10 0 0 1 10 10"/></svg> Sending...`;
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                form.style.display = 'none';
+                successMsg.style.display = 'block';
+            }, 1500);
+        }
+
+        // Add spin animation
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `@keyframes spin { to { transform: rotate(360deg); } } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

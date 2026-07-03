@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobFlow — Find Work That Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --obsidian:    #0C0C10;
+  --ink:         #14141C;
+  --card-dark:   #1A1A26;
+  --border-dark: rgba(255,255,255,0.07);
+  --ivory:       #FAFAF8;
+  --champagne:   #F0E6D3;
+  --violet:      #7C3AED;
+  --violet-light:#A78BFA;
+  --violet-glow: rgba(124,58,237,0.35);
+  --slate:       #8B8FA8;
+  --text-dim:    #6B7080;
+  --green:       #10B981;
+  --amber:       #F59E0B;
+  --red:         #EF4444;
+  --font-serif:  'DM Serif Display', Georgia, serif;
+  --font-sans:   'DM Sans', system-ui, sans-serif;
+  --font-mono:   'JetBrains Mono', monospace;
+  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+  --ease-out:    cubic-bezier(0.16,1,0.3,1);
+}
+
+/* ── RESET & BASE ───────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-sans);background:var(--ivory);color:var(--obsidian);overflow-x:hidden}
+
+/* ── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--obsidian)}
+::-webkit-scrollbar-thumb{background:var(--violet);border-radius:10px}
+
+/* ── 3D SCENE ───────────────────────────────────────────── */
+.scene-wrap{
+  position:absolute;inset:0;overflow:hidden;
+  perspective:900px;perspective-origin:60% 50%;
+  pointer-events:none;
+}
+.scene{
+  position:absolute;width:420px;height:420px;
+  right:8%;top:50%;transform:translateY(-50%);
+  transform-style:preserve-3d;
+  animation:sceneFloat 8s ease-in-out infinite;
+  pointer-events:auto;
+}
+@keyframes sceneFloat{
+  0%,100%{transform:translateY(-50%) rotateX(4deg) rotateY(-8deg)}
+  50%{transform:translateY(calc(-50% - 18px)) rotateX(-2deg) rotateY(6deg)}
+}
+.jcard-3d{
+  position:absolute;width:340px;
+  background:var(--card-dark);
+  border:1px solid var(--border-dark);
+  border-radius:16px;padding:20px 24px;
+  backface-visibility:hidden;
+  transition:transform 0.5s var(--ease-out);
+  box-shadow:0 24px 60px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.04) inset;
+}
+.jcard-3d:nth-child(4){
+  transform:rotateY(-18deg) rotateX(6deg) translateZ(60px);
+  top:0;left:0;
+}
+.jcard-3d:nth-child(5){
+  transform:rotateY(-14deg) rotateX(3deg) translateZ(0px) translateY(50px) translateX(30px);
+  opacity:0.75;
+}
+.jcard-3d:nth-child(6){
+  transform:rotateY(-10deg) rotateX(0deg) translateZ(-60px) translateY(100px) translateX(60px);
+  opacity:0.45;
+}
+.scene:hover .jcard-3d:nth-child(4){transform:rotateY(-22deg) rotateX(8deg) translateZ(80px) translateY(-10px)}
+.scene:hover .jcard-3d:nth-child(5){transform:rotateY(-16deg) rotateX(4deg) translateZ(10px) translateY(60px) translateX(40px)}
+.scene:hover .jcard-3d:nth-child(6){transform:rotateY(-10deg) rotateX(0deg) translateZ(-50px) translateY(120px) translateX(80px)}
+
+.jcard-3d .co-logo{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;margin-bottom:12px;
+  background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.2);
+}
+.jcard-3d .co-title{color:#fff;font-size:0.9rem;font-weight:600;margin-bottom:3px;font-family:var(--font-sans)}
+.jcard-3d .co-sub{color:var(--slate);font-size:0.72rem;font-family:var(--font-mono)}
+.jcard-3d .co-chips{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.jcard-3d .chip{
+  padding:4px 10px;border-radius:6px;font-size:0.65rem;
+  font-family:var(--font-mono);font-weight:500;
+  background:rgba(255,255,255,0.06);color:var(--slate);border:1px solid rgba(255,255,255,0.05);
+}
+.jcard-3d .chip.violet{background:rgba(124,58,237,0.2);color:var(--violet-light);border-color:rgba(124,58,237,0.2)}
+.jcard-3d .co-salary{font-family:var(--font-mono);font-size:0.78rem;color:var(--green);margin-top:12px;font-weight:500}
+
+/* Orbiting glow rings */
+.ring{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(124,58,237,0.15);
+  pointer-events:none;
+}
+.ring1{width:500px;height:500px;top:-40px;left:-80px;animation:spin1 22s linear infinite}
+.ring2{width:320px;height:320px;top:50px;left:50px;animation:spin1 14s linear infinite reverse;border-color:rgba(167,139,250,0.1)}
+@keyframes spin1{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.dot{
+  position:absolute;border-radius:50%;
+  background:var(--violet-light);opacity:0.5;
+  animation:dotFloat 6s ease-in-out infinite;
+}
+.dot1{width:4px;height:4px;top:15%;left:20%;animation-delay:0s}
+.dot2{width:3px;height:3px;top:60%;left:70%;animation-delay:2s}
+.dot3{width:5px;height:5px;top:40%;left:55%;animation-delay:4s}
+@keyframes dotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ── NAVBAR ─────────────────────────────────────────────── */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 3rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.4s, border-color 0.4s;
+  border-bottom:1px solid transparent;
+}
+.navbar.scrolled{
+  background:rgba(12,12,16,0.88);
+  backdrop-filter:blur(20px) saturate(1.6);
+  border-color:var(--border-dark);
+}
+.nav-logo{
+  font-family:var(--font-serif);font-size:1.4rem;letter-spacing:-0.02em;
+  color:#fff;cursor:pointer;user-select:none;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.logo-dot{
+  width:8px;height:8px;background:var(--violet);border-radius:50%;
+  box-shadow:0 0 12px var(--violet);
+  animation:logoPulse 2s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 8px var(--violet)}50%{box-shadow:0 0 20px var(--violet)}}
+.nav-links{display:flex;align-items:center;gap:0.25rem}
+.nav-link{
+  padding:0.5rem 1rem;border-radius:8px;
+  font-size:0.82rem;font-weight:500;letter-spacing:0.01em;
+  color:rgba(255,255,255,0.5);cursor:pointer;
+  transition:all 0.2s;border:none;background:none;font-family:var(--font-sans);
+}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.nav-link.active{color:#fff}
+.nav-btn-outline{
+  padding:0.5rem 1.2rem;border-radius:8px;
+  font-size:0.82rem;font-weight:500;
+  color:rgba(255,255,255,0.7);cursor:pointer;
+  border:1px solid rgba(255,255,255,0.15);background:transparent;
+  transition:all 0.2s;font-family:var(--font-sans);
+}
+.nav-btn-outline:hover{border-color:rgba(255,255,255,0.35);color:#fff}
+.nav-btn-fill{
+  padding:0.5rem 1.4rem;border-radius:8px;
+  font-size:0.82rem;font-weight:600;
+  color:#fff;cursor:pointer;
+  background:var(--violet);border:none;
+  transition:all 0.2s;letter-spacing:0.01em;
+  box-shadow:0 4px 16px rgba(124,58,237,0.35);
+  font-family:var(--font-sans);
+}
+.nav-btn-fill:hover{background:#6d28d9;box-shadow:0 6px 24px rgba(124,58,237,0.5);transform:translateY(-1px)}
+.nav-user{display:flex;align-items:center;gap:0.75rem}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--violet),#a855f7);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:700;color:#fff;
+}
+.nav-name{font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.7)}
+.nav-logout{
+  font-size:0.78rem;color:rgba(255,255,255,0.35);cursor:pointer;
+  background:none;border:none;transition:color 0.2s;font-family:var(--font-sans);
+}
+.nav-logout:hover{color:#EF4444}
+
+.mob-nav{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(12,12,16,0.97);backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.5rem;transform:translateX(100%);transition:transform 0.4s var(--ease-out);
+}
+.mob-nav.open{transform:translateX(0)}
+.mob-nav-link{
+  font-family:var(--font-serif);font-size:2rem;color:rgba(255,255,255,0.5);
+  cursor:pointer;transition:color 0.2s;background:none;border:none;
+}
+.mob-nav-link:hover{color:#fff}
+.mob-close{
+  position:absolute;top:1.5rem;right:2rem;
+  background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.5rem;cursor:pointer;
+}
+
+/* ── HERO ───────────────────────────────────────────────── */
+#hero{
+  min-height:100vh;
+  background:var(--obsidian);
+  position:relative;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+.hero-noise{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.6;pointer-events:none;
+}
+.hero-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 30% 50%,rgba(124,58,237,0.08) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 20%,rgba(167,139,250,0.06) 0%,transparent 60%);
+}
+.hero-content{
+  position:relative;z-index:10;
+  padding:0 3rem;
+  max-width:600px;
+  margin-left:max(3rem,calc(50vw - 600px));
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--violet-light);margin-bottom:1.75rem;
+}
+.eyebrow-line{width:32px;height:1px;background:var(--violet-light)}
+.hero-h1{
+  font-family:var(--font-serif);
+  font-size:clamp(3rem,5.5vw,5.2rem);
+  line-height:1.05;letter-spacing:-0.03em;
+  color:#fff;margin-bottom:0.3rem;
+}
+.hero-h1 em{color:var(--violet-light);font-style:italic}
+.hero-h1-sub{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:clamp(2.2rem,4vw,3.8rem);
+  line-height:1.1;letter-spacing:-0.02em;
+  color:rgba(255,255,255,0.28);margin-bottom:1.75rem;
+}
+.hero-sub{
+  font-size:1rem;line-height:1.75;color:rgba(255,255,255,0.45);
+  max-width:440px;margin-bottom:2.5rem;font-weight:300;
+}
+.hero-actions{display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap}
+.btn-primary{
+  padding:0.85rem 2rem;border-radius:10px;
+  background:var(--violet);color:#fff;
+  font-size:0.9rem;font-weight:600;border:none;cursor:pointer;
+  box-shadow:0 8px 24px rgba(124,58,237,0.4);
+  transition:all 0.2s var(--ease-out);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:var(--font-sans);
+}
+.btn-primary:hover{background:#6d28d9;transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,0.5)}
+.btn-secondary{
+  padding:0.85rem 2rem;border-radius:10px;
+  background:transparent;color:rgba(255,255,255,0.6);
+  font-size:0.9rem;font-weight:500;
+  border:1px solid rgba(255,255,255,0.12);cursor:pointer;
+  transition:all 0.2s;font-family:var(--font-sans);
+  display:inline-flex;align-items:center;gap:0.5rem;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+.hero-stats{
+  display:flex;gap:2.5rem;margin-top:4rem;padding-top:2rem;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.stat-n{
+  font-family:var(--font-serif);font-size:2.4rem;color:#fff;
+  line-height:1;letter-spacing:-0.04em;
+}
+.stat-l{font-size:0.72rem;color:var(--slate);margin-top:4px;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;font-family:var(--font-mono)}
+
+.hero-search{
+  display:flex;align-items:center;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;overflow:hidden;
+  max-width:480px;margin-bottom:1.5rem;
+  transition:border-color 0.2s;
+  backdrop-filter:blur(10px);
+}
+.hero-search:focus-within{border-color:rgba(124,58,237,0.5)}
+.hs-icon{padding:0 1rem;color:var(--slate);flex-shrink:0;display:flex;align-items:center}
+.hs-input{
+  flex:1;padding:0.9rem 0;background:transparent;
+  border:none;outline:none;color:#fff;font-size:0.88rem;
+  font-family:var(--font-sans);
+}
+.hs-input::placeholder{color:rgba(255,255,255,0.25)}
+.hs-divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.hs-loc{
+  padding:0 1rem;color:rgba(255,255,255,0.25);
+  font-size:0.82rem;white-space:nowrap;cursor:pointer;
+}
+.hs-btn{
+  background:var(--violet);color:#fff;border:none;cursor:pointer;
+  padding:0 1.5rem;height:100%;min-height:48px;font-size:0.82rem;font-weight:600;
+  font-family:var(--font-sans);
+  transition:background 0.2s;white-space:nowrap;
+}
+.hs-btn:hover{background:#6d28d9}
+
+.popular-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem;align-items:center}
+.ptag{
+  font-size:0.72rem;font-family:var(--font-mono);
+  padding:5px 12px;border-radius:100px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.4);cursor:pointer;
+  transition:all 0.2s;
+}
+.ptag:hover{border-color:rgba(124,58,237,0.4);color:var(--violet-light)}
+
+.scroll-ind{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  opacity:0.3;animation:scrollBounce 2s ease-in-out infinite;
+}
+.scroll-ind span{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
+@keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* ── TICKER ─────────────────────────────────────────────── */
+.ticker-wrap{
+  background:var(--ink);border-top:1px solid var(--border-dark);
+  border-bottom:1px solid var(--border-dark);
+  padding:0.65rem 0;overflow:hidden;
+}
+.ticker-inner{
+  display:flex;gap:3rem;white-space:nowrap;
+  animation:tickerMove 28s linear infinite;
+}
+.ticker-item{font-family:var(--font-mono);font-size:0.7rem;color:var(--slate)}
+.ticker-item strong{color:rgba(255,255,255,0.5)}
+@keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTIONS ───────────────────────────────────────────── */
+.section{padding:6rem 3rem}
+.section-dark{background:var(--ink);color:#fff}
+.section-light{background:var(--ivory)}
+.section-chalk{background:var(--champagne)}
+.sec-label{
+  font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--violet);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.75rem;
+}
+.sec-label::after{content:'';flex:0 0 28px;height:1px;background:var(--violet);opacity:0.5}
+.sec-title{
+  font-family:var(--font-serif);font-size:clamp(2rem,3.5vw,3rem);
+  letter-spacing:-0.03em;line-height:1.08;
+}
+.sec-title.light{color:#fff}
+.sec-sub{font-size:0.92rem;color:var(--text-dim);margin-top:0.75rem;line-height:1.7;max-width:480px}
+.sec-sub.light{color:var(--slate)}
+.inner{max-width:1160px;margin:0 auto}
+
+/* ── JOB CARDS ──────────────────────────────────────────── */
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem;margin-top:2.5rem}
+.job-card{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:14px;padding:1.5rem;cursor:pointer;
+  transition:all 0.25s var(--ease-out);
+  position:relative;overflow:hidden;
+}
+.job-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,58,237,0.03),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.job-card:hover{border-color:rgba(124,58,237,0.2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.08)}
+.job-card:hover::before{opacity:1}
+.job-card.dark-card{
+  background:var(--card-dark);border-color:var(--border-dark);
+}
+.job-card.dark-card:hover{border-color:rgba(124,58,237,0.3);box-shadow:0 16px 40px rgba(0,0,0,0.4)}
+.jc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
+.jc-logo{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(167,139,250,0.08));
+  border:1px solid rgba(124,58,237,0.1);flex-shrink:0;
+}
+.jc-logo.dark{background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.15)}
+.jc-feat{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;
+  padding:4px 10px;border-radius:100px;
+  background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(167,139,250,0.08));
+  color:var(--violet);border:1px solid rgba(124,58,237,0.15);
+}
+.jc-title{font-size:1rem;font-weight:600;letter-spacing:-0.01em;margin-bottom:2px;color:var(--obsidian)}
+.jc-title.light-text{color:#fff}
+.jc-co{font-size:0.8rem;color:var(--text-dim)}
+.jc-co.light-text{color:var(--slate)}
+.jc-meta{
+  display:flex;flex-wrap:wrap;gap:0.5rem;margin:1rem 0 0;
+  padding-top:1rem;border-top:1px solid rgba(0,0,0,0.05);
+  align-items:center;
+}
+.dark-card .jc-meta{border-color:var(--border-dark)}
+.jc-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 10px;border-radius:6px;
+  font-family:var(--font-mono);font-size:0.65rem;font-weight:500;
+  background:rgba(0,0,0,0.04);color:var(--text-dim);
+}
+.dark-card .jc-chip{background:rgba(255,255,255,0.05);color:var(--slate)}
+.jc-chip.green{background:rgba(16,185,129,0.08);color:var(--green)}
+.jc-chip.violet{background:rgba(124,58,237,0.08);color:var(--violet)}
+.dark-card .jc-chip.green{background:rgba(16,185,129,0.12)}
+.dark-card .jc-chip.violet{background:rgba(124,58,237,0.15);color:var(--violet-light)}
+.jc-salary{
+  font-family:var(--font-mono);font-size:0.75rem;color:var(--green);
+  margin-left:auto;font-weight:500;
+}
+.jc-age{font-family:var(--font-mono);font-size:0.62rem;color:var(--slate)}
+
+/* ── FILTERS ────────────────────────────────────────────── */
+.filters-bar{
+  display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;
+  margin-bottom:1.5rem;
+}
+.filter-pill{
+  padding:0.5rem 1.1rem;border-radius:100px;font-size:0.78rem;font-weight:500;
+  border:1px solid rgba(0,0,0,0.1);background:#fff;cursor:pointer;
+  transition:all 0.2s;color:var(--text-dim);font-family:var(--font-sans);
+}
+.filter-pill:hover,.filter-pill.active{
+  background:var(--obsidian);color:#fff;border-color:var(--obsidian);
+}
+.filter-search{
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 1rem;border-radius:100px;
+  border:1px solid rgba(0,0,0,0.1);background:#fff;
+  flex:1;min-width:200px;max-width:320px;
+}
+.filter-search input{
+  flex:1;border:none;outline:none;font-size:0.78rem;color:var(--obsidian);
+  font-family:var(--font-sans);background:transparent;
+}
+.filter-search input::placeholder{color:rgba(0,0,0,0.25)}
+.results-count{font-family:var(--font-mono);font-size:0.72rem;color:var(--slate);margin-left:auto}
+
+/* ── CATEGORIES ─────────────────────────────────────────── */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:2.5rem}
+.cat-card{
+  padding:1.5rem;border-radius:14px;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.03);
+  transition:all 0.25s var(--ease-out);
+  display:flex;flex-direction:column;gap:0.75rem;
+}
+.cat-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(124,58,237,0.25);transform:translateY(-3px)}
+.cat-name{font-size:0.9rem;font-weight:600;color:#fff}
+.cat-count{font-family:var(--font-mono);font-size:0.68rem;color:var(--slate)}
+
+/* ── COMPANIES ──────────────────────────────────────────── */
+.companies-row{
+  display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;
+  margin-top:2rem;scrollbar-width:none;
+}
+.companies-row::-webkit-scrollbar{display:none}
+.co-card{
+  flex-shrink:0;background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:14px;padding:1.5rem 2rem;min-width:200px;
+  display:flex;flex-direction:column;align-items:center;gap:0.75rem;
+  transition:all 0.2s;cursor:pointer;
+}
+.co-card:hover{border-color:rgba(124,58,237,0.2);box-shadow:0 8px 24px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.co-card .co-cname{font-size:0.82rem;font-weight:600;color:var(--obsidian)}
+.co-card .co-jobs{font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)}
+
+/* ── JOB DETAIL ─────────────────────────────────────────── */
+.detail-wrap{max-width:760px;margin:0 auto;padding:2rem 3rem 6rem}
+.detail-back{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.82rem;color:var(--slate);cursor:pointer;
+  margin-bottom:1.5rem;background:none;border:none;
+  transition:color 0.2s;font-family:var(--font-sans);
+}
+.detail-back:hover{color:var(--obsidian)}
+.detail-header{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;padding:2rem;margin-bottom:1rem;
+}
+.detail-co-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem}
+.detail-logo{
+  width:60px;height:60px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(167,139,250,0.08));
+  border:1px solid rgba(124,58,237,0.1);flex-shrink:0;
+}
+.detail-title{font-size:1.6rem;font-weight:700;letter-spacing:-0.02em;color:var(--obsidian);margin-bottom:4px}
+.detail-co{font-size:0.9rem;color:var(--text-dim)}
+.detail-pills{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
+.detail-pill{
+  padding:6px 14px;border-radius:8px;font-size:0.75rem;font-family:var(--font-mono);
+  background:rgba(0,0,0,0.04);color:var(--text-dim);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.detail-pill.green{background:rgba(16,185,129,0.08);color:var(--green)}
+.detail-pill.violet{background:rgba(124,58,237,0.08);color:var(--violet)}
+.detail-apply{
+  width:100%;margin-top:1.5rem;padding:1rem;
+  background:var(--violet);color:#fff;border:none;border-radius:10px;
+  font-size:0.9rem;font-weight:600;cursor:pointer;
+  box-shadow:0 6px 20px rgba(124,58,237,0.35);
+  transition:all 0.2s;font-family:var(--font-sans);
+}
+.detail-apply:hover{background:#6d28d9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(124,58,237,0.45)}
+.detail-section{background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:16px;padding:2rem;margin-bottom:1rem}
+.detail-sec-title{font-size:0.82rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:1rem}
+.detail-body{font-size:0.9rem;line-height:1.8;color:var(--obsidian)}
+.detail-req-item{display:flex;gap:0.75rem;margin-bottom:0.5rem;font-size:0.88rem;line-height:1.6;color:var(--obsidian)}
+.detail-req-dot{width:6px;height:6px;background:var(--violet);border-radius:50%;flex-shrink:0;margin-top:0.55rem}
+.benefit-tag{
+  display:inline-block;padding:6px 14px;border-radius:8px;
+  background:rgba(124,58,237,0.06);color:var(--violet);
+  font-size:0.78rem;font-family:var(--font-mono);margin:0 6px 6px 0;
+  border:1px solid rgba(124,58,237,0.1);
+}
+
+/* ── MODAL ──────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(12,12,16,0.7);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;padding:1.5rem;
+  animation:fadeIn 0.2s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:#fff;border-radius:20px;width:100%;max-width:500px;
+  max-height:90vh;overflow-y:auto;
+  animation:modalUp 0.3s var(--ease-out);
+  box-shadow:0 40px 80px rgba(0,0,0,0.3);
+}
+@keyframes modalUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-head{
+  padding:1.5rem 1.75rem;border-bottom:1px solid rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:#fff;border-radius:20px 20px 0 0;z-index:1;
+}
+.modal-title{font-size:1rem;font-weight:700;letter-spacing:-0.01em;color:var(--obsidian)}
+.modal-close{background:rgba(0,0,0,0.06);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;color:var(--slate);transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(239,68,68,0.08);color:var(--red)}
+.modal-body{padding:1.75rem}
+
+/* ── FORM ───────────────────────────────────────────────── */
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:0.4rem}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:0.75rem 1rem;
+  border:1.5px solid rgba(0,0,0,0.08);border-radius:10px;
+  font-size:0.88rem;color:var(--obsidian);outline:none;
+  font-family:var(--font-sans);background:#fff;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:var(--violet);
+  box-shadow:0 0 0 3px rgba(124,58,237,0.1);
+}
+.fg input:disabled{background:rgba(0,0,0,0.02);color:var(--text-dim);cursor:not-allowed}
+.fg select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238B8FA8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:2.5rem;
+}
+.fg textarea{resize:vertical;min-height:100px}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.role-tabs{display:flex;gap:0.5rem;margin-bottom:1.25rem}
+.role-tab{
+  flex:1;padding:0.65rem;border-radius:8px;text-align:center;
+  font-size:0.78rem;font-weight:600;cursor:pointer;border:none;
+  background:rgba(0,0,0,0.04);color:var(--text-dim);transition:all 0.2s;
+  font-family:var(--font-sans);
+}
+.role-tab.active{background:var(--obsidian);color:#fff}
+.form-submit{
+  width:100%;padding:0.9rem;border-radius:10px;
+  background:var(--violet);color:#fff;border:none;cursor:pointer;
+  font-size:0.9rem;font-weight:600;font-family:var(--font-sans);
+  box-shadow:0 4px 16px rgba(124,58,237,0.35);
+  transition:all 0.2s;margin-top:0.5rem;
+}
+.form-submit:hover:not(:disabled){background:#6d28d9;transform:translateY(-1px)}
+.form-submit:disabled{opacity:0.55;cursor:not-allowed;transform:none}
+.form-link{text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-dim)}
+.form-link button{color:var(--violet);font-weight:600;background:none;border:none;cursor:pointer;font-family:var(--font-sans)}
+.form-link button:hover{text-decoration:underline}
+
+/* Upload area */
+.upload-area{
+  border:2px dashed rgba(124,58,237,0.2);border-radius:10px;
+  padding:1.5rem;text-align:center;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;background:rgba(124,58,237,0.02);
+}
+.upload-area:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.04)}
+.upload-icon{font-size:1.5rem;margin-bottom:0.5rem;display:flex;justify-content:center}
+.upload-text{font-size:0.8rem;color:var(--text-dim)}
+.upload-text strong{color:var(--violet)}
+
+/* ── DASHBOARD ──────────────────────────────────────────── */
+.dash-wrap{max-width:1100px;margin:0 auto;padding:2rem 3rem 6rem}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:14px;padding:1.25rem 1.5rem;
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.sc-label{font-family:var(--font-mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim)}
+.sc-val{font-family:var(--font-serif);font-size:2rem;letter-spacing:-0.04em;color:var(--obsidian);line-height:1}
+.dash-tabs{display:flex;gap:0.25rem;margin-bottom:1.5rem;border-bottom:1px solid rgba(0,0,0,0.07);padding-bottom:0}
+.dash-tab{
+  padding:0.7rem 1.25rem;font-size:0.82rem;font-weight:600;cursor:pointer;
+  border:none;background:none;color:var(--text-dim);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all 0.2s;font-family:var(--font-sans);
+}
+.dash-tab.active{color:var(--violet);border-color:var(--violet)}
+.dash-tab:hover:not(.active){color:var(--obsidian)}
+
+/* App rows */
+.app-row{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:14px;
+  padding:1.25rem 1.5rem;margin-bottom:0.75rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  flex-wrap:wrap;cursor:pointer;transition:border-color 0.2s;
+}
+.app-row:hover{border-color:rgba(124,58,237,0.2)}
+.app-row.no-click{cursor:default}
+.app-job-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:rgba(124,58,237,0.06);flex-shrink:0}
+.app-job-title{font-size:0.9rem;font-weight:600;color:var(--obsidian)}
+.app-job-co{font-size:0.78rem;color:var(--text-dim);margin-top:2px}
+.app-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+
+/* Badge */
+.badge{
+  padding:4px 10px;border-radius:100px;font-size:0.65rem;
+  font-family:var(--font-mono);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
+}
+.badge-pending{background:#FEF3C7;color:#92400E}
+.badge-reviewed{background:#DBEAFE;color:#1E40AF}
+.badge-accepted{background:#D1FAE5;color:#065F46}
+.badge-rejected{background:#FEE2E2;color:#991B1B}
+.badge-active{background:#D1FAE5;color:#065F46}
+.badge-closed{background:#F3F4F6;color:#6B7280}
+
+/* Action buttons */
+.act-btn{
+  padding:6px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;
+  border:1px solid;transition:all 0.15s;font-family:var(--font-sans);
+  display:inline-flex;align-items:center;gap:4px;
+}
+.act-review{background:transparent;border-color:rgba(124,58,237,0.2);color:var(--violet)}
+.act-review:hover{background:rgba(124,58,237,0.06)}
+.act-accept{background:var(--green);border-color:var(--green);color:#fff}
+.act-accept:hover{background:#059669}
+.act-reject{background:transparent;border-color:rgba(239,68,68,0.2);color:var(--red)}
+.act-reject:hover{background:rgba(239,68,68,0.05)}
+.act-edit{background:transparent;border-color:rgba(0,0,0,0.1);color:var(--text-dim)}
+.act-edit:hover{border-color:rgba(0,0,0,0.2);color:var(--obsidian)}
+.act-del{background:transparent;border-color:rgba(239,68,68,0.15);color:var(--red)}
+.act-del:hover{background:rgba(239,68,68,0.05)}
+
+/* Job post form grid */
+.job-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+
+/* Empty state */
+.empty{
+  text-align:center;padding:4rem 2rem;background:#fff;
+  border:1px solid rgba(0,0,0,0.06);border-radius:16px;
+}
+.empty-icon{font-size:3rem;margin-bottom:1rem}
+.empty-title{font-size:1.1rem;font-weight:700;color:var(--obsidian);margin-bottom:0.4rem}
+.empty-sub{font-size:0.85rem;color:var(--text-dim)}
+
+/* ── TOAST ──────────────────────────────────────────────── */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:5000;display:flex;flex-direction:column;gap:0.5rem;pointer-events:none}
+.toast{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.85rem 1.25rem;border-radius:12px;
+  min-width:260px;max-width:360px;
+  background:var(--ink);border:1px solid var(--border-dark);
+  color:#fff;box-shadow:0 12px 32px rgba(0,0,0,0.4);
+  animation:toastIn 0.35s var(--ease-out);
+}
+@keyframes toastIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
+.toast-success .toast-icon{background:rgba(16,185,129,0.15);color:var(--green)}
+.toast-error .toast-icon{background:rgba(239,68,68,0.15);color:var(--red)}
+.toast-msg{font-size:0.82rem;font-weight:500;line-height:1.4}
+
+/* ── CTA ────────────────────────────────────────────────── */
+.cta-section{
+  background:var(--obsidian);padding:6rem 3rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-glow{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-title{font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.5rem);color:#fff;letter-spacing:-0.03em;margin-bottom:1rem}
+.cta-sub{font-size:0.95rem;color:var(--slate);max-width:400px;margin:0 auto 2.5rem;line-height:1.7}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:1rem 2.5rem;border-radius:12px;
+  background:#fff;color:var(--violet);border:none;cursor:pointer;
+  font-size:0.95rem;font-weight:700;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  transition:all 0.2s;font-family:var(--font-sans);
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.4)}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer{
+  background:var(--obsidian);border-top:1px solid var(--border-dark);
+  padding:4rem 3rem 2rem;
+}
+.footer-inner{max-width:1160px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand-name{font-family:var(--font-serif);font-size:1.4rem;color:#fff;margin-bottom:0.75rem}
+.footer-brand-sub{font-size:0.8rem;color:var(--slate);line-height:1.75;max-width:240px}
+.footer-col-title{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:1rem}
+.footer-col-link{display:block;font-size:0.82rem;color:var(--slate);text-decoration:none;margin-bottom:0.6rem;transition:color 0.2s;cursor:pointer;background:none;border:none;font-family:var(--font-sans);text-align:left;padding:0}
+.footer-col-link:hover{color:#fff}
+.footer-bottom{border-top:1px solid var(--border-dark);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-family:var(--font-mono);font-size:0.68rem;color:rgba(255,255,255,0.2)}
+
+/* Profile */
+.profile-card{background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:16px;padding:2rem;max-width:540px}
+.profile-title{font-size:1rem;font-weight:700;color:var(--obsidian);margin-bottom:1.5rem}
+
+/* Cover letter preview */
+.cover-preview{margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.02);border-radius:8px;font-size:0.82rem;color:var(--text-dim);line-height:1.7}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:1024px){
+  .scene{right:-5%;transform:translateY(-50%) scale(0.85)}
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem}
+}
+@media(max-width:768px){
+  .navbar{padding:0 1.25rem}
+  .nav-links,.nav-btn-outline,.nav-btn-fill,.nav-user{display:none}
+  .hamburger-btn{display:flex}
+  .hero-content{padding:0 1.25rem;margin-left:0}
+  .scene{display:none}
+  .section{padding:4rem 1.25rem}
+  .hero-stats{gap:1.5rem}
+  .jobs-grid{grid-template-columns:1fr}
+  .detail-wrap,.dash-wrap{padding:1.5rem 1.25rem 5rem}
+  .footer-top{grid-template-columns:1fr}
+  footer{padding:3rem 1.25rem 2rem}
+  .fg-row,.job-form-grid{grid-template-columns:1fr}
+  .cta-section{padding:4rem 1.25rem}
+}
+@media(max-width:480px){
+  .hero-h1{font-size:2.6rem}
+  .hero-h1-sub{font-size:2rem}
+  .hero-search{max-width:100%}
+  .hero-stats{flex-wrap:wrap;gap:1rem}
+}
+
+/* ── UTILITIES ──────────────────────────────────────────── */
+.animate-in{animation:animIn 0.5s var(--ease-out) both}
+@keyframes animIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Hamburger button */
+.hamburger-btn{
+  display:none;background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,0.6);padding:4px;align-items:center;
+}
+@media(max-width:768px){.hamburger-btn{display:flex}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, createContext, useContext, useCallback } = React;
+
+/* ─────────────────────────────────────────────────────────
+   SEED DATA
+───────────────────────────────────────────────────────── */
+const SEED_JOBS = [
+  {
+    id:'1', title:'Senior Product Designer', company:'Linear', location:'San Francisco, CA',
+    type:'Full-time', salary:'$150k–$200k', category:'Design', experience:'Senior', remote:true,
+    description:'Lead design at one of the fastest-growing dev tools companies. Shape the product vision, build a design system, and craft experiences used by hundreds of thousands of engineers.',
+    requirements:['5+ years product design experience','Portfolio showing complex interaction design','Proficiency in Figma + prototyping','Experience with design systems at scale','Excellent writing and communication'],
+    benefits:['Equity Package','Health & Dental','$2k Home Office','Unlimited PTO','Top-of-market Salary'],
+    postedAt:'2024-01-16', employerId:'seed', logo:'◼', featured:true, status:'active'
+  },
+  {
+    id:'2', title:'Staff Engineer – Platform', company:'Vercel', location:'Remote',
+    type:'Full-time', salary:'$220k–$280k', category:'Engineering', experience:'Staff', remote:true,
+    description:'Own the edge runtime infrastructure powering millions of deployments daily. Work at the intersection of distributed systems, developer tooling, and web performance.',
+    requirements:['8+ years engineering','Distributed systems experience','TypeScript / Rust experience preferred','Proven track record of technical leadership','Strong communication'],
+    benefits:['Remote-first','Equity','$3k Setup Budget','Learning Stipend','Premium Healthcare'],
+    postedAt:'2024-01-15', employerId:'seed', logo:'△', featured:true, status:'active'
+  },
+  {
+    id:'3', title:'Growth Marketing Lead', company:'Fathom Analytics', location:'Remote',
+    type:'Full-time', salary:'$100k–$140k', category:'Marketing', experience:'Mid-level', remote:true,
+    description:'Take ownership of growth channels for a privacy-first analytics startup. Run experiments, write content, and grow a community of developers who care about the open web.',
+    requirements:['4+ years B2B/SaaS marketing','Strong data / analytics skills','Developer audience experience is a plus','Content creation ability','Self-directed working style'],
+    benefits:['Fully Remote','Profit Share','Async Culture','Generous PTO','Flexible Hours'],
+    postedAt:'2024-01-14', employerId:'seed', logo:'○', featured:false, status:'active'
+  },
+  {
+    id:'4', title:'iOS Engineer', company:'Craft', location:'Munich / Remote',
+    type:'Full-time', salary:'€80k–€120k', category:'Engineering', experience:'Mid-level', remote:true,
+    description:'Build a beautiful, powerful note-taking app used by people who think seriously about how they capture ideas. We care deeply about craft, performance, and native platform APIs.',
+    requirements:['3+ years iOS development','Swift expertise','Experience with complex animations / UIKit','Care for performance and UX details','Collaborative mindset'],
+    benefits:['EU Benefits Package','Flexible Remote','Annual Retreat','Stock Options','Conference Budget'],
+    postedAt:'2024-01-13', employerId:'seed', logo:'◇', featured:true, status:'active'
+  },
+  {
+    id:'5', title:'Data Scientist – ML Platform', company:'Hugging Face', location:'New York / Paris',
+    type:'Full-time', salary:'$160k–$210k', category:'Data', experience:'Senior', remote:true,
+    description:'Push the frontier of accessible AI. Work on models, datasets, and tooling that the entire research community depends on.',
+    requirements:['PhD or equivalent research experience','Python + PyTorch proficiency','Published ML research preferred','Strong communication of technical concepts','Open source contributions welcome'],
+    benefits:['Research Budget','Conference Travel','Hardware Credits','Flexible Location','Mission-driven Culture'],
+    postedAt:'2024-01-12', employerId:'seed', logo:'☆', featured:false, status:'active'
+  },
+  {
+    id:'6', title:'Technical Writer', company:'Stripe', location:'Remote (US)',
+    type:'Contract', salary:'$80/hour', category:'Writing', experience:'Mid-level', remote:true,
+    description:"Make Stripe's API documentation the gold standard. You will work with engineers to write docs, guides, and reference material that developers actually love to read.",
+    requirements:['3+ years technical writing','Familiarity with REST APIs and SDKs','Developer empathy','Excellent writing and editing skills','Payment / fintech experience a plus'],
+    benefits:['Competitive Rate','Flexible Hours','Remote Work','Access to Stripe Credits'],
+    postedAt:'2024-01-11', employerId:'seed', logo:'∞', featured:false, status:'active'
+  },
+];
+
+/* ─────────────────────────────────────────────────────────
+   IN-MEMORY STORE (no localStorage)
+───────────────────────────────────────────────────────── */
+const store = {
+  jobs: [...SEED_JOBS],
+  users: [],
+  apps: [],
+  currentUser: null,
+};
+
+/* ─────────────────────────────────────────────────────────
+   CONTEXT
+───────────────────────────────────────────────────────── */
+const Ctx = createContext(null);
+
+function AppProvider({ children }) {
+  const [user, setUser]           = useState(null);
+  const [jobs, setJobsState]      = useState([...SEED_JOBS]);
+  const [apps, setAppsState]      = useState([]);
+  const [toasts, setToasts]       = useState([]);
+  const [page, setPage]           = useState('home');
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const toast = useCallback((msg, type = 'success') => {
+    const id = Date.now() + Math.random();
+    setToasts(p => [...p, { id, msg, type }]);
+    setTimeout(() => setToasts(p => p.filter(t => t.id !== id)), 3500);
+  }, []);
+
+  /* ── Sync store refs so helpers always have fresh data ── */
+  const syncJobs = (j) => { store.jobs = j; setJobsState(j); };
+  const syncApps = (a) => { store.apps = a; setAppsState(a); };
+
+  /* ── Auth ─────────────────────────────────────────────── */
+  const login = (email, pw, role) => {
+    const found = store.users.find(u => u.email === email && u.password === pw && u.role === role);
+    if (found) {
+      store.currentUser = found;
+      setUser(found);
+      toast(`Welcome back, ${found.name.split(' ')[0]} 👋`);
+      return true;
+    }
+    return false;
+  };
+
+  const register = (data) => {
+    if (store.users.find(u => u.email === data.email)) {
+      toast('Email already in use', 'error');
+      return false;
+    }
+    const u = { ...data, id: Date.now().toString(), createdAt: new Date().toISOString() };
+    store.users.push(u);
+    store.currentUser = u;
+    setUser(u);
+    toast('Account created!');
+    return true;
+  };
+
+  const logout = () => {
+    store.currentUser = null;
+    setUser(null);
+    setPage('home');
+    toast('See you soon!');
+  };
+
+  /* ── Jobs ─────────────────────────────────────────────── */
+  const postJob = (data) => {
+    const j = {
+      ...data,
+      id: Date.now().toString(),
+      employerId: user.id,
+      company: user.company || user.name,
+      logo: (user.company || user.name)[0].toUpperCase(),
+      postedAt: new Date().toISOString().split('T')[0],
+      status: 'active',
+      featured: false,
+    };
+    syncJobs([...store.jobs, j]);
+    toast('Job posted!');
+  };
+
+  const updateJob = (id, upd) => {
+    syncJobs(store.jobs.map(j => j.id === id ? { ...j, ...upd } : j));
+    toast('Job updated!');
+  };
+
+  const deleteJob = (id) => {
+    syncJobs(store.jobs.filter(j => j.id !== id));
+    toast('Job removed.');
+  };
+
+  /* ── Applications ─────────────────────────────────────── */
+  const applyJob = (jobId, data) => {
+    if (store.apps.find(a => a.jobId === jobId && a.candidateId === user.id)) {
+      toast('You already applied for this role', 'error');
+      return false;
+    }
+    const a = {
+      ...data,
+      id: Date.now().toString(),
+      jobId,
+      candidateId: user.id,
+      candidateName: user.name,
+      candidateEmail: user.email,
+      appliedAt: new Date().toISOString(),
+      status: 'pending',
+    };
+    syncApps([...store.apps, a]);
+    toast('Application sent! 🎉');
+    return true;
+  };
+
+  const updateApp = (id, status) => {
+    syncApps(store.apps.map(a => a.id === id ? { ...a, status, updatedAt: new Date().toISOString() } : a));
+    toast(`Marked as ${status}`);
+  };
+
+  /* ── Profile ──────────────────────────────────────────── */
+  const updateProfile = (upd) => {
+    const idx = store.users.findIndex(u => u.id === user.id);
+    if (idx !== -1) {
+      store.users[idx] = { ...store.users[idx], ...upd };
+      store.currentUser = store.users[idx];
+      setUser(store.users[idx]);
+      toast('Profile saved!');
+    }
+  };
+
+  return (
+    <Ctx.Provider value={{
+      user, login, register, logout, updateProfile,
+      jobs, postJob, updateJob, deleteJob,
+      apps, applyJob, updateApp,
+      toasts, toast,
+      page, setPage,
+      selectedJob, setSelectedJob,
+    }}>
+      {children}
+    </Ctx.Provider>
+  );
+}
+
+const useApp = () => useContext(Ctx);
+
+/* ─────────────────────────────────────────────────────────
+   SVG ICONS
+───────────────────────────────────────────────────────── */
+const Icon = {
+  Search: () => (
+    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    </svg>
+  ),
+  Pin: () => (
+    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+  ),
+  Brief: () => (
+    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    </svg>
+  ),
+  Wifi: () => (
+    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+    </svg>
+  ),
+  Back: () => (
+    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+  ),
+  Plus: () => (
+    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/>
+    </svg>
+  ),
+  Edit: () => (
+    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+    </svg>
+  ),
+  Trash: () => (
+    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+    </svg>
+  ),
+  Up: () => (
+    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+    </svg>
+  ),
+  X: () => (
+    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  ),
+  Check: () => (
+    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/>
+    </svg>
+  ),
+  Arrow: () => (
+    <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+    </svg>
+  ),
+  Ham: () => (
+    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  ),
+  Close: () => (
+    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  ),
+  View: () => (
+    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+    </svg>
+  ),
+};
+
+/* ─────────────────────────────────────────────────────────
+   TOASTS
+───────────────────────────────────────────────────────── */
+function Toasts() {
+  const { toasts } = useApp();
+  return (
+    <div className="toast-wrap">
+      {toasts.map(t => (
+        <div key={t.id} className={`toast toast-${t.type}`}>
+          <div className="toast-icon">{t.type === 'success' ? <Icon.Check /> : '!'}</div>
+          <span className="toast-msg">{t.msg}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   NAVBAR
+───────────────────────────────────────────────────────── */
+function Navbar() {
+  const { user, logout, page, setPage } = useApp();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobOpen, setMobOpen]   = useState(false);
+
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  const go = (p) => { setPage(p); setMobOpen(false); };
+
+  return (
+    <>
+      <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
+        <div className="nav-logo" onClick={() => go('home')}>
+          <div className="logo-dot" />
+          JobFlow
+        </div>
+
+        <div className="nav-links">
+          <button className={`nav-link${page === 'home' ? ' active' : ''}`} onClick={() => go('home')}>Home</button>
+          <button className={`nav-link${page === 'jobs' ? ' active' : ''}`} onClick={() => go('jobs')}>Browse Jobs</button>
+          {user?.role === 'employer'  && <button className={`nav-link${page === 'emp-dash' ? ' active' : ''}`} onClick={() => go('emp-dash')}>Dashboard</button>}
+          {user?.role === 'candidate' && <button className={`nav-link${page === 'can-dash' ? ' active' : ''}`} onClick={() => go('can-dash')}>Dashboard</button>}
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {user ? (
+            <div className="nav-user">
+              <div className="nav-avatar">{user.name[0].toUpperCase()}</div>
+              <span className="nav-name">{user.name.split(' ')[0]}</span>
+              <button className="nav-logout" onClick={logout}>Log out</button>
+            </div>
+          ) : (
+            <>
+              <button className="nav-btn-outline" onClick={() => go('login')}>Sign in</button>
+              <button className="nav-btn-fill"    onClick={() => go('register')}>Get started</button>
+            </>
+          )}
+          <button className="hamburger-btn" onClick={() => setMobOpen(true)} aria-label="Open menu">
+            <Icon.Ham />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile nav */}
+      <div className={`mob-nav${mobOpen ? ' open' : ''}`}>
+        <button className="mob-close" onClick={() => setMobOpen(false)} aria-label="Close menu">
+          <Icon.Close />
+        </button>
+        <button className="mob-nav-link" onClick={() => go('home')}>Home</button>
+        <button className="mob-nav-link" onClick={() => go('jobs')}>Browse</button>
+        {user?.role === 'employer'  && <button className="mob-nav-link" onClick={() => go('emp-dash')}>Dashboard</button>}
+        {user?.role === 'candidate' && <button className="mob-nav-link" onClick={() => go('can-dash')}>Dashboard</button>}
+        {!user && <button className="mob-nav-link" onClick={() => go('login')}>Sign in</button>}
+        {!user && <button className="mob-nav-link" style={{ color: '#A78BFA' }} onClick={() => go('register')}>Get started →</button>}
+        {user  && <button className="mob-nav-link" style={{ color: '#EF4444' }} onClick={() => { logout(); setMobOpen(false); }}>Log out</button>}
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   JOB CARD
+───────────────────────────────────────────────────────── */
+function JobCard({ job, dark = false }) {
+  const { setPage, setSelectedJob } = useApp();
+  const days = Math.floor((Date.now() - new Date(job.postedAt)) / (1000 * 60 * 60 * 24));
+
+  return (
+    <div
+      className={`job-card${dark ? ' dark-card' : ''}`}
+      onClick={() => { setSelectedJob(job); setPage('job-detail'); }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.key === 'Enter' && (setSelectedJob(job), setPage('job-detail'))}
+    >
+      <div className="jc-top">
+        <div className={`jc-logo${dark ? ' dark' : ''}`}>{job.logo}</div>
+        {job.featured && <div className="jc-feat">Featured</div>}
+      </div>
+      <div className={`jc-title${dark ? ' light-text' : ''}`}>{job.title}</div>
+      <div className={`jc-co${dark ? ' light-text' : ''}`}>{job.company}</div>
+      <div className="jc-meta">
+        <span className="jc-chip"><Icon.Pin />{job.location}</span>
+        <span className="jc-chip"><Icon.Brief />{job.type}</span>
+        {job.remote && <span className="jc-chip green"><Icon.Wifi />Remote</span>}
+        <span className="jc-chip violet">{job.experience}</span>
+        <span className="jc-salary">{job.salary}</span>
+        <span className="jc-age">{days === 0 ? 'Today' : `${days}d ago`}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────────────────── */
+function Hero() {
+  const { jobs, setPage } = useApp();
+  const [search, setSearch] = useState('');
+  const tags = ['React', 'TypeScript', 'Remote', 'Design Systems', 'Machine Learning', 'Go'];
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage('jobs');
+  };
+
+  return (
+    <section id="hero">
+      <div className="hero-noise" />
+      <div className="hero-grad" />
+
+      {/* 3D scene */}
+      <div className="scene-wrap">
+        <div className="scene">
+          <div className="ring ring1" />
+          <div className="ring ring2" />
+          <div className="dot dot1" />
+          <div className="dot dot2" />
+          <div className="dot dot3" />
+
+          <div className="jcard-3d">
+            <div className="co-logo">◼</div>
+            <div className="co-title">Senior Product Designer</div>
+            <div className="co-sub">Linear · San Francisco</div>
+            <div className="co-chips">
+              <span className="chip violet">Design Systems</span>
+              <span className="chip">Figma</span>
+              <span className="chip">Remote</span>
+            </div>
+            <div className="co-salary">$150k – $200k</div>
+          </div>
+
+          <div className="jcard-3d">
+            <div className="co-logo" style={{ background: 'rgba(16,185,129,0.12)' }}>△</div>
+            <div className="co-title">Staff Engineer – Platform</div>
+            <div className="co-sub">Vercel · Remote</div>
+            <div className="co-chips">
+              <span className="chip violet">TypeScript</span>
+              <span className="chip">Rust</span>
+            </div>
+            <div className="co-salary">$220k – $280k</div>
+          </div>
+
+          <div className="jcard-3d">
+            <div className="co-logo" style={{ background: 'rgba(245,158,11,0.12)' }}>○</div>
+            <div className="co-title">Growth Marketing Lead</div>
+            <div className="co-sub">Fathom Analytics · Remote</div>
+            <div className="co-chips">
+              <span className="chip">B2B SaaS</span>
+              <span className="chip violet">Remote</span>
+            </div>
+            <div className="co-salary">$100k – $140k</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="hero-content animate-in">
+        <div className="hero-eyebrow"><div className="eyebrow-line" />Work that changes things</div>
+        <h1 className="hero-h1">Find work<br />that <em>actually</em></h1>
+        <div className="hero-h1-sub">matters to you.</div>
+        <p className="hero-sub">Curated roles at companies building the next generation of tools, products, and ideas. No noise. Just signal.</p>
+
+        <form className="hero-search" onSubmit={handleSearch}>
+          <div className="hs-icon"><Icon.Search /></div>
+          <input
+            className="hs-input"
+            placeholder="Role, skill, or company"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <div className="hs-divider" />
+          <span className="hs-loc">Remote ▾</span>
+          <button type="submit" className="hs-btn">Search →</button>
+        </form>
+
+        <div className="popular-tags">
+          <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', fontFamily: 'var(--font-mono)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Trending:
+          </span>
+          {tags.map(t => (
+            <button key={t} className="ptag" onClick={() => setPage('jobs')}>{t}</button>
+          ))}
+        </div>
+
+        <div className="hero-stats">
+          <div>
+            <div className="stat-n">{jobs.filter(j => j.status === 'active').length}</div>
+            <div className="stat-l">Open roles</div>
+          </div>
+          <div>
+            <div className="stat-n">{new Set(jobs.map(j => j.company)).size}</div>
+            <div className="stat-l">Companies</div>
+          </div>
+          <div>
+            <div className="stat-n">100%</div>
+            <div className="stat-l">Remote options</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="scroll-ind">
+        <span>Scroll</span>
+        <svg width="1" height="36" viewBox="0 0 1 36" fill="none">
+          <line x1="0.5" y1="0" x2="0.5" y2="36" stroke="white" strokeOpacity="0.4" />
+        </svg>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   TICKER
+───────────────────────────────────────────────────────── */
+function Ticker() {
+  const items = [
+    '◼ Linear · Product Designer',
+    '△ Vercel · Staff Engineer',
+    '○ Fathom · Marketing Lead',
+    '◇ Craft · iOS Engineer',
+    '☆ Hugging Face · Data Scientist',
+    '∞ Stripe · Technical Writer',
+  ];
+  const doubled = [...items, ...items];
+  return (
+    <div className="ticker-wrap">
+      <div className="ticker-inner">
+        {doubled.map((it, i) => (
+          <span key={i} className="ticker-item">
+            {i % 2 === 0 ? <strong>{it}</strong> : it}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   HOME PAGE
+───────────────────────────────────────────────────────── */
+function HomePage() {
+  const { jobs, setPage } = useApp();
+  const featured = jobs.filter(j => j.featured && j.status === 'active');
+
+  const cats = [
+    { name: 'Engineering', icon: '⟨/⟩' },
+    { name: 'Design',      icon: '◈'   },
+    { name: 'Marketing',   icon: '↗'   },
+    { name: 'Data',        icon: '∑'   },
+    { name: 'Writing',     icon: '✦'   },
+    { name: 'Finance',     icon: '◎'   },
+    { name: 'Operations',  icon: '⊕'   },
+    { name: 'Sales',       icon: '⬡'   },
+  ].map(c => ({ ...c, count: jobs.filter(j => j.category === c.name).length }));
+
+  const cos = [
+    { name: 'Linear',  em: '◼', jobs: 2 },
+    { name: 'Vercel',  em: '△', jobs: 3 },
+    { name: 'Stripe',  em: '∞', jobs: 4 },
+    { name: 'Figma',   em: '◈', jobs: 2 },
+    { name: 'Notion',  em: '◻', jobs: 1 },
+    { name: 'Loom',    em: '○', jobs: 2 },
+  ];
+
+  return (
+    <>
+      <Hero />
+      <Ticker />
+
+      {/* Featured roles */}
+      <section className="section section-light">
+        <div className="inner">
+          <div className="sec-label">Hand-picked</div>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+            <h2 className="sec-title">Featured roles</h2>
+            <button
+              className="btn-secondary"
+              style={{ color: 'var(--violet)', borderColor: 'rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.04)' }}
+              onClick={() => setPage('jobs')}
+            >
+              All jobs <Icon.Arrow />
+            </button>
+          </div>
+          <p className="sec-sub">Opportunities at companies that take craft seriously.</p>
+          <div className="jobs-grid">
+            {featured.map(j => <JobCard key={j.id} job={j} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="section section-dark">
+        <div className="inner">
+          <div className="sec-label">Explore by field</div>
+          <h2 className="sec-title light">Browse by category</h2>
+          <div className="cats-grid">
+            {cats.map(c => (
+              <div key={c.name} className="cat-card" onClick={() => setPage('jobs')} role="button" tabIndex={0}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', color: 'var(--violet-light)' }}>{c.icon}</div>
+                <div className="cat-name">{c.name}</div>
+                <div className="cat-count">{c.count} open {c.count === 1 ? 'role' : 'roles'}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Companies */}
+      <section className="section section-chalk">
+        <div className="inner">
+          <div className="sec-label">Top employers</div>
+          <h2 className="sec-title">Companies hiring now</h2>
+          <div className="companies-row">
+            {cos.map(c => (
+              <div key={c.name} className="co-card" onClick={() => setPage('jobs')}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', color: 'var(--violet)' }}>{c.em}</div>
+                <div className="co-cname">{c.name}</div>
+                <div className="co-jobs">{c.jobs} open roles</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <div className="cta-section">
+        <div className="cta-glow" />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="sec-label" style={{ justifyContent: 'center', marginBottom: '1rem', color: 'var(--violet-light)' }}>For companies</div>
+          <h2 className="cta-title">
+            Hiring someone great<br />
+            <em style={{ fontFamily: 'var(--font-serif)', color: 'rgba(255,255,255,0.35)' }}>starts here.</em>
+          </h2>
+          <p className="cta-sub">Post a job and put it in front of the people who'll actually care about what you're building.</p>
+          <button className="cta-btn" onClick={() => setPage('register')}>
+            Post a role — it's free <Icon.Arrow />
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   JOBS PAGE
+───────────────────────────────────────────────────────── */
+function JobsPage() {
+  const { jobs } = useApp();
+  const [search, setSearch] = useState('');
+  const [cat, setCat]       = useState('');
+  const [remote, setRemote] = useState(false);
+
+  const cats = ['All', ...new Set(jobs.map(j => j.category))];
+
+  const filtered = jobs.filter(j => {
+    if (j.status !== 'active') return false;
+    if (search && !j.title.toLowerCase().includes(search.toLowerCase()) && !j.company.toLowerCase().includes(search.toLowerCase())) return false;
+    if (cat && cat !== 'All' && j.category !== cat) return false;
+    if (remote && !j.remote) return false;
+    return true;
+  });
+
+  return (
+    <div style={{ background: 'var(--ivory)', minHeight: '100vh', paddingTop: '64px' }}>
+      <div style={{ background: 'var(--ink)', padding: '3rem 3rem 0' }}>
+        <div className="inner">
+          <div style={{ paddingBottom: '2rem' }}>
+            <div className="sec-label" style={{ color: 'var(--violet-light)' }}>All opportunities</div>
+            <h1 className="sec-title light">Browse jobs</h1>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: '2rem 3rem', maxWidth: '1160px', margin: '0 auto' }}>
+        <div className="filters-bar">
+          <div className="filter-search">
+            <Icon.Search />
+            <input
+              placeholder="Search roles or companies"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+          {cats.slice(0, 6).map(c => (
+            <button
+              key={c}
+              className={`filter-pill${(cat === c || (!cat && c === 'All')) ? ' active' : ''}`}
+              onClick={() => setCat(c === 'All' ? '' : c)}
+            >
+              {c}
+            </button>
+          ))}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-dim)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            <input
+              type="checkbox"
+              checked={remote}
+              onChange={e => setRemote(e.target.checked)}
+              style={{ accentColor: 'var(--violet)' }}
+            />
+            Remote only
+          </label>
+          <span className="results-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
+        </div>
+
+        {filtered.length > 0
+          ? <div className="jobs-grid">{filtered.map(j => <JobCard key={j.id} job={j} />)}</div>
+          : (
+            <div className="empty">
+              <div className="empty-icon">◌</div>
+              <div className="empty-title">No roles found</div>
+              <div className="empty-sub">Try adjusting your filters or search term.</div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   JOB DETAIL
+───────────────────────────────────────────────────────── */
+function JobDetail() {
+  const { selectedJob, user, setPage, applyJob, toast } = useApp();
+  const [modal, setModal]   = useState(false);
+  const [letter, setLetter] = useState('');
+  const [resume, setResume] = useState(null);
+  const [busy, setBusy]     = useState(false);
+  const fileRef             = useRef(null);
+
+  if (!selectedJob) { setPage('jobs'); return null; }
+  const j = selectedJob;
+
+  const handleApply = () => {
+    if (!user) { toast('Sign in to apply', 'error'); setPage('login'); return; }
+    if (user.role !== 'candidate') { toast('Only candidates can apply', 'error'); return; }
+    setModal(true);
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!letter.trim()) { toast('Add a cover letter', 'error'); return; }
+    setBusy(true);
+    await new Promise(r => setTimeout(r, 700));
+    const ok = applyJob(j.id, { coverLetter: letter, resumeName: resume?.name || 'resume.pdf' });
+    setBusy(false);
+    if (ok) { setModal(false); setLetter(''); setResume(null); }
+  };
+
+  return (
+    <div style={{ background: 'var(--ivory)', minHeight: '100vh', paddingTop: '64px' }}>
+      <div className="detail-wrap">
+        <button className="detail-back" onClick={() => setPage('jobs')}>
+          <Icon.Back /> Back to jobs
+        </button>
+
+        <div className="detail-header">
+          <div className="detail-co-row">
+            <div className="detail-logo">{j.logo}</div>
+            <div>
+              <div className="detail-title">{j.title}</div>
+              <div className="detail-co">{j.company}</div>
+            </div>
+          </div>
+          <div className="detail-pills">
+            <span className="detail-pill"><Icon.Pin />{j.location}</span>
+            <span className="detail-pill"><Icon.Brief />{j.type}</span>
+            <span className="detail-pill violet">{j.experience}</span>
+            {j.remote && <span className="detail-pill green"><Icon.Wifi />Remote</span>}
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--green)', fontWeight: '600', marginTop: '1rem' }}>
+            {j.salary}
+          </div>
+          <button className="detail-apply" onClick={handleApply}>Apply for this role →</button>
+        </div>
+
+        <div className="detail-section">
+          <div className="detail-sec-title">About this role</div>
+          <div className="detail-body">{j.description}</div>
+        </div>
+
+        <div className="detail-section">
+          <div className="detail-sec-title">What we're looking for</div>
+          {j.requirements.map((r, i) => (
+            <div key={i} className="detail-req-item">
+              <div className="detail-req-dot" />
+              <span>{r}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="detail-section">
+          <div className="detail-sec-title">Benefits</div>
+          <div>{j.benefits.map((b, i) => <span key={i} className="benefit-tag">{b}</span>)}</div>
+        </div>
+      </div>
+
+      {/* Apply modal */}
+      {modal && (
+        <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setModal(false); }}>
+          <div className="modal-box">
+            <div className="modal-head">
+              <div className="modal-title">Apply — {j.title}</div>
+              <button className="modal-close" onClick={() => setModal(false)}><Icon.X /></button>
+            </div>
+            <div className="modal-body">
+              <div className="fg">
+                <label>Cover letter *</label>
+                <textarea
+                  rows="5"
+                  placeholder="Why are you a great fit for this role? Be specific."
+                  value={letter}
+                  onChange={e => setLetter(e.target.value)}
+                />
+              </div>
+              <div className="fg">
+                <label>Resume / CV</label>
+                <div className="upload-area" onClick={() => fileRef.current && fileRef.current.click()}>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    style={{ display: 'none' }}
+                    onChange={e => setResume(e.target.files[0] || null)}
+                  />
+                  <div className="upload-icon"><Icon.Up /></div>
+                  <div className="upload-text">
+                    {resume
+                      ? <strong>{resume.name}</strong>
+                      : <><strong>Click to upload</strong> or drag and drop</>
+                    }
+                  </div>
+                </div>
+              </div>
+              <button
+                className="form-submit"
+                onClick={submit}
+                disabled={busy || !letter.trim()}
+              >
+                {busy ? 'Sending…' : 'Submit application →'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   AUTH
+───────────────────────────────────────────────────────── */
+function AuthPage({ mode }) {
+  const { login, register, setPage, toast } = useApp();
+  const [role, setRole] = useState('candidate');
+  const [f, setF]       = useState({ name: '', email: '', password: '', company: '', title: '', location: '' });
+  const [busy, setBusy] = useState(false);
+  const upd = (k, v)    => setF(p => ({ ...p, [k]: v }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    await new Promise(r => setTimeout(r, 400));
+    if (mode === 'login') {
+      const ok = login(f.email, f.password, role);
+      setBusy(false);
+      if (ok) setPage(role === 'employer' ? 'emp-dash' : 'can-dash');
+      else toast('Incorrect credentials — check email, password, and account type', 'error');
+    } else {
+      const ok = register({ ...f, role });
+      setBusy(false);
+      if (ok) setPage(role === 'employer' ? 'emp-dash' : 'can-dash');
+    }
+  };
+
+  return (
+    <div style={{ background: 'var(--ivory)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5rem 1.5rem' }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--obsidian)', letterSpacing: '-0.03em' }}>
+            {mode === 'login' ? 'Welcome back' : 'Create account'}
+          </div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginTop: '0.4rem' }}>
+            {mode === 'login' ? 'Sign in to continue' : 'Start your search today'}
+          </div>
+        </div>
+
+        <div style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '20px', padding: '2rem', boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}>
+          <div className="role-tabs">
+            <button className={`role-tab${role === 'candidate' ? ' active' : ''}`} onClick={() => setRole('candidate')}>Job Seeker</button>
+            <button className={`role-tab${role === 'employer'  ? ' active' : ''}`} onClick={() => setRole('employer')}>Employer</button>
+          </div>
+
+          <form onSubmit={submit}>
+            {mode === 'register' && (
+              <div className="fg">
+                <label>Full name</label>
+                <input required value={f.name} onChange={e => upd('name', e.target.value)} placeholder="Your full name" />
+              </div>
+            )}
+            <div className="fg">
+              <label>Email</label>
+              <input type="email" required value={f.email} onChange={e => upd('email', e.target.value)} placeholder="you@company.com" />
+            </div>
+            <div className="fg">
+              <label>Password</label>
+              <input type="password" required minLength="6" value={f.password} onChange={e => upd('password', e.target.value)} placeholder="Min 6 characters" />
+            </div>
+            {mode === 'register' && role === 'employer' && (
+              <div className="fg">
+                <label>Company name</label>
+                <input required value={f.company} onChange={e => upd('company', e.target.value)} placeholder="Acme Inc." />
+              </div>
+            )}
+            {mode === 'register' && role === 'candidate' && (
+              <div className="fg-row">
+                <div className="fg" style={{ marginBottom: 0 }}>
+                  <label>Job title</label>
+                  <input value={f.title} onChange={e => upd('title', e.target.value)} placeholder="e.g. Engineer" />
+                </div>
+                <div className="fg" style={{ marginBottom: 0 }}>
+                  <label>Location</label>
+                  <input value={f.location} onChange={e => upd('location', e.target.value)} placeholder="City or Remote" />
+                </div>
+              </div>
+            )}
+            <button type="submit" className="form-submit" disabled={busy} style={{ marginTop: '1.25rem' }}>
+              {busy ? 'Please wait…' : mode === 'login' ? 'Sign in →' : 'Create account →'}
+            </button>
+          </form>
+
+          <div className="form-link">
+            {mode === 'login'
+              ? <><span>No account? </span><button onClick={() => setPage('register')}>Sign up</button></>
+              : <><span>Have an account? </span><button onClick={() => setPage('login')}>Sign in</button></>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   PROFILE FORM
+───────────────────────────────────────────────────────── */
+function ProfileForm({ user, onUpdate, isEmployer }) {
+  const [f, setF]       = useState({
+    name:     user.name     || '',
+    email:    user.email    || '',
+    company:  user.company  || '',
+    title:    user.title    || '',
+    location: user.location || '',
+    bio:      user.bio      || '',
+    website:  user.website  || '',
+    linkedin: user.linkedin || '',
+  });
+  const [busy, setBusy] = useState(false);
+
+  const sub = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    await new Promise(r => setTimeout(r, 400));
+    onUpdate(f);
+    setBusy(false);
+  };
+
+  return (
+    <div className="profile-card">
+      <div className="profile-title">Profile settings</div>
+      <form onSubmit={sub}>
+        <div className="fg-row">
+          <div className="fg">
+            <label>Full name</label>
+            <input value={f.name} onChange={e => setF({ ...f, name: e.target.value })} />
+          </div>
+          <div className="fg">
+            <label>Email</label>
+            <input type="email" disabled value={f.email} />
+          </div>
+        </div>
+        {isEmployer && (
+          <div className="fg">
+            <label>Company</label>
+            <input value={f.company} onChange={e => setF({ ...f, company: e.target.value })} />
+          </div>
+        )}
+        {!isEmployer && (
+          <div className="fg-row">
+            <div className="fg">
+              <label>Job title</label>
+              <input value={f.title} onChange={e => setF({ ...f, title: e.target.value })} placeholder="e.g. Product Designer" />
+            </div>
+            <div className="fg">
+              <label>Location</label>
+              <input value={f.location} onChange={e => setF({ ...f, location: e.target.value })} />
+            </div>
+          </div>
+        )}
+        <div className="fg">
+          <label>Bio</label>
+          <textarea rows="3" value={f.bio} onChange={e => setF({ ...f, bio: e.target.value })} placeholder="A short intro about yourself…" />
+        </div>
+        <div className="fg-row">
+          <div className="fg">
+            <label>Website</label>
+            <input type="url" value={f.website} onChange={e => setF({ ...f, website: e.target.value })} placeholder="https://" />
+          </div>
+          <div className="fg">
+            <label>LinkedIn</label>
+            <input type="url" value={f.linkedin} onChange={e => setF({ ...f, linkedin: e.target.value })} placeholder="https://linkedin.com/in/…" />
+          </div>
+        </div>
+        <button type="submit" className="form-submit" disabled={busy}>
+          {busy ? 'Saving…' : 'Save changes →'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   EMPLOYER DASHBOARD
+───────────────────────────────────────────────────────── */
+function EmpDash() {
+  const { user, jobs, apps, postJob, updateJob, deleteJob, updateApp, updateProfile, setPage, setSelectedJob } = useApp();
+  const [tab, setTab]         = useState('jobs');
+  const [jobModal, setJobModal] = useState(false);
+  const [editJob, setEditJob]   = useState(null);
+  const [jf, setJf]             = useState({
+    title: '', location: '', type: 'Full-time', salary: '', category: 'Engineering',
+    experience: 'Mid-level', remote: false, description: '', requirements: '', benefits: '',
+  });
+
+  useEffect(() => {
+    if (!user || user.role !== 'employer') setPage('login');
+  }, [user]);
+
+  if (!user || user.role !== 'employer') return null;
+
+  const mine   = jobs.filter(j => j.employerId === user.id);
+  const myApps = apps.filter(a => mine.some(j => j.id === a.jobId));
+
+  const stats = [
+    { label: 'Active jobs',   val: mine.filter(j => j.status === 'active').length, icon: '◼' },
+    { label: 'Applications',  val: myApps.length, icon: '△' },
+    { label: 'Pending',       val: myApps.filter(a => a.status === 'pending').length, icon: '○' },
+    { label: 'Accepted',      val: myApps.filter(a => a.status === 'accepted').length, icon: '✦' },
+  ];
+
+  const openNew = () => {
+    setEditJob(null);
+    setJf({ title: '', location: '', type: 'Full-time', salary: '', category: 'Engineering', experience: 'Mid-level', remote: false, description: '', requirements: '', benefits: '' });
+    setJobModal(true);
+  };
+
+  const openEdit = (j) => {
+    setEditJob(j);
+    setJf({ ...j, requirements: j.requirements.join('\n'), benefits: j.benefits.join(', ') });
+    setJobModal(true);
+  };
+
+  const submitJob = (e) => {
+    e.preventDefault();
+    const data = {
+      ...jf,
+      requirements: jf.requirements.split('\n').map(r => r.trim()).filter(Boolean),
+      benefits:      jf.benefits.split(',').map(b => b.trim()).filter(Boolean),
+    };
+    if (editJob) updateJob(editJob.id, data);
+    else postJob(data);
+    setJobModal(false);
+  };
+
+  return (
+    <div style={{ background: 'var(--ivory)', minHeight: '100vh', paddingTop: '64px' }}>
+      <div style={{ background: 'var(--ink)', padding: '2.5rem 3rem' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', color: '#fff', letterSpacing: '-0.03em' }}>Dashboard</div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--slate)', marginTop: '3px' }}>Welcome back, {user.name.split(' ')[0]}</div>
+          </div>
+          <button className="nav-btn-fill" onClick={openNew} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Icon.Plus /> Post a job
+          </button>
+        </div>
+      </div>
+
+      <div className="dash-wrap">
+        <div className="stat-cards">
+          {stats.map(s => (
+            <div key={s.label} className="stat-card">
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--violet)', marginBottom: '0.25rem' }}>{s.icon}</div>
+              <div className="sc-val">{s.val}</div>
+              <div className="sc-label">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="dash-tabs">
+          {['jobs', 'applications', 'profile'].map(t => (
+            <button key={t} className={`dash-tab${tab === t ? ' active' : ''}`} onClick={() => setTab(t)} style={{ textTransform: 'capitalize' }}>
+              {t === 'jobs' ? 'My Jobs' : t === 'applications' ? 'Applications' : 'Profile'}
+            </button>
+          ))}
+        </div>
+
+        {/* My Jobs tab */}
+        {tab === 'jobs' && (
+          mine.length > 0
+            ? mine.map(j => {
+                const appCount = apps.filter(a => a.jobId === j.id).length;
+                return (
+                  <div key={j.id} className="app-row">
+                    <div className="app-job-logo">{j.logo}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="app-job-title">{j.title}</div>
+                      <div className="app-job-co">{j.location} · {j.type} · {appCount} applicant{appCount !== 1 ? 's' : ''}</div>
+                    </div>
+                    <div className="app-actions">
+                      <span className={`badge badge-${j.status}`}>{j.status}</span>
+                      <button className="act-btn act-edit" title="View" onClick={() => { setSelectedJob(j); setPage('job-detail'); }}><Icon.View /></button>
+                      <button className="act-btn act-edit" title="Edit" onClick={() => openEdit(j)}><Icon.Edit /></button>
+                      <button className="act-btn act-del"  title="Delete" onClick={() => deleteJob(j.id)}><Icon.Trash /></button>
+                    </div>
+                  </div>
+                );
+              })
+            : (
+              <div className="empty">
+                <div className="empty-icon">◌</div>
+                <div className="empty-title">No jobs posted yet</div>
+                <div className="empty-sub">Post your first role to start receiving applications.</div>
+              </div>
+            )
+        )}
+
+        {/* Applications tab */}
+        {tab === 'applications' && (
+          myApps.length > 0
+            ? myApps.map(a => {
+                const j = jobs.find(j => j.id === a.jobId);
+                return (
+                  <div key={a.id} className="app-row no-click" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <div>
+                        <div className="app-job-title">{a.candidateName}</div>
+                        <div className="app-job-co">
+                          {a.candidateEmail} · Applied for <em>{j?.title || 'Deleted role'}</em>
+                        </div>
+                      </div>
+                      <div className="app-actions">
+                        <span className={`badge badge-${a.status}`}>{a.status}</span>
+                        {a.status === 'pending' && (
+                          <>
+                            <button className="act-btn act-review" onClick={() => updateApp(a.id, 'reviewed')}>Review</button>
+                            <button className="act-btn act-accept" onClick={() => updateApp(a.id, 'accepted')}><Icon.Check /> Accept</button>
+                            <button className="act-btn act-reject" onClick={() => updateApp(a.id, 'rejected')}>Reject</button>
+                          </>
+                        )}
+                        {a.status === 'reviewed' && (
+                          <>
+                            <button className="act-btn act-accept" onClick={() => updateApp(a.id, 'accepted')}><Icon.Check /> Accept</button>
+                            <button className="act-btn act-reject" onClick={() => updateApp(a.id, 'rejected')}>Reject</button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {a.coverLetter && (
+                      <div className="cover-preview">{a.coverLetter}</div>
+                    )}
+                    <div style={{ fontSize: '0.7rem', color: 'var(--slate)', fontFamily: 'var(--font-mono)', marginTop: '0.5rem' }}>
+                      Applied {new Date(a.appliedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {a.resumeName && <> · 📄 {a.resumeName}</>}
+                    </div>
+                  </div>
+                );
+              })
+            : (
+              <div className="empty">
+                <div className="empty-icon">△</div>
+                <div className="empty-title">No applications yet</div>
+                <div className="empty-sub">Applications will appear here once candidates apply to your roles.</div>
+              </div>
+            )
+        )}
+
+        {/* Profile tab */}
+        {tab === 'profile' && <ProfileForm user={user} onUpdate={updateProfile} isEmployer={true} />}
+      </div>
+
+      {/* Job post/edit modal */}
+      {jobModal && (
+        <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setJobModal(false); }}>
+          <div className="modal-box" style={{ maxWidth: '640px' }}>
+            <div className="modal-head">
+              <div className="modal-title">{editJob ? 'Edit job posting' : 'Post a new job'}</div>
+              <button className="modal-close" onClick={() => setJobModal(false)}><Icon.X /></button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={submitJob}>
+                <div className="job-form-grid">
+                  <div className="fg">
+                    <label>Job title *</label>
+                    <input required value={jf.title} onChange={e => setJf({ ...jf, title: e.target.value })} placeholder="Senior Designer" />
+                  </div>
+                  <div className="fg">
+                    <label>Location *</label>
+                    <input required value={jf.location} onChange={e => setJf({ ...jf, location: e.target.value })} placeholder="Remote or City, Country" />
+                  </div>
+                  <div className="fg">
+                    <label>Type</label>
+                    <select value={jf.type} onChange={e => setJf({ ...jf, type: e.target.value })}>
+                      <option>Full-time</option>
+                      <option>Part-time</option>
+                      <option>Contract</option>
+                      <option>Internship</option>
+                    </select>
+                  </div>
+                  <div className="fg">
+                    <label>Salary *</label>
+                    <input required value={jf.salary} onChange={e => setJf({ ...jf, salary: e.target.value })} placeholder="$80k – $120k" />
+                  </div>
+                  <div className="fg">
+                    <label>Category</label>
+                    <select value={jf.category} onChange={e => setJf({ ...jf, category: e.target.value })}>
+                      <option>Engineering</option>
+                      <option>Design</option>
+                      <option>Marketing</option>
+                      <option>Data</option>
+                      <option>Sales</option>
+                      <option>Writing</option>
+                      <option>Finance</option>
+                      <option>Operations</option>
+                    </select>
+                  </div>
+                  <div className="fg">
+                    <label>Experience level</label>
+                    <select value={jf.experience} onChange={e => setJf({ ...jf, experience: e.target.value })}>
+                      <option>Entry-level</option>
+                      <option>Mid-level</option>
+                      <option>Senior</option>
+                      <option>Staff</option>
+                      <option>Executive</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="fg">
+                  <label>Description *</label>
+                  <textarea rows="3" required value={jf.description} onChange={e => setJf({ ...jf, description: e.target.value })} placeholder="What will this person do? What makes this role exciting?" />
+                </div>
+                <div className="fg">
+                  <label>Requirements (one per line)</label>
+                  <textarea rows="4" value={jf.requirements} onChange={e => setJf({ ...jf, requirements: e.target.value })} placeholder={"5+ years experience\nExcellent communication\nStrong portfolio"} />
+                </div>
+                <div className="fg">
+                  <label>Benefits (comma-separated)</label>
+                  <input value={jf.benefits} onChange={e => setJf({ ...jf, benefits: e.target.value })} placeholder="Equity, Remote, Healthcare, Learning Budget" />
+                </div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--text-dim)', cursor: 'pointer', marginBottom: '1.25rem' }}>
+                  <input type="checkbox" checked={jf.remote} onChange={e => setJf({ ...jf, remote: e.target.checked })} style={{ accentColor: 'var(--violet)' }} />
+                  This is a remote-eligible role
+                </label>
+                <button type="submit" className="form-submit">
+                  {editJob ? 'Save changes →' : 'Post job →'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   CANDIDATE DASHBOARD
+───────────────────────────────────────────────────────── */
+function CanDash() {
+  const { user, jobs, apps, updateProfile, setPage, setSelectedJob } = useApp();
+  const [tab, setTab] = useState('apps');
+
+  useEffect(() => {
+    if (!user || user.role !== 'candidate') setPage('login');
+  }, [user]);
+
+  if (!user || user.role !== 'candidate') return null;
+
+  const mine = apps.filter(a => a.candidateId === user.id);
+
+  const stats = [
+    { label: 'Applied',   val: mine.length, icon: '△' },
+    { label: 'Pending',   val: mine.filter(a => a.status === 'pending').length, icon: '○' },
+    { label: 'Reviewed',  val: mine.filter(a => a.status === 'reviewed').length, icon: '◇' },
+    { label: 'Accepted',  val: mine.filter(a => a.status === 'accepted').length, icon: '✦' },
+  ];
+
+  return (
+    <div style={{ background: 'var(--ivory)', minHeight: '100vh', paddingTop: '64px' }}>
+      <div style={{ background: 'var(--ink)', padding: '2.5rem 3rem' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', color: '#fff', letterSpacing: '-0.03em' }}>My Applications</div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--slate)', marginTop: '3px' }}>Hey {user.name.split(' ')[0]}, here's your progress</div>
+          </div>
+          <button className="nav-btn-fill" onClick={() => setPage('jobs')}>Browse jobs →</button>
+        </div>
+      </div>
+
+      <div className="dash-wrap">
+        <div className="stat-cards">
+          {stats.map(s => (
+            <div key={s.label} className="stat-card">
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--violet)', marginBottom: '0.25rem' }}>{s.icon}</div>
+              <div className="sc-val">{s.val}</div>
+              <div className="sc-label">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="dash-tabs">
+          {['apps', 'profile'].map(t => (
+            <button key={t} className={`dash-tab${tab === t ? ' active' : ''}`} onClick={() => setTab(t)}>
+              {t === 'apps' ? 'Applications' : 'Profile'}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'apps' && (
+          mine.length > 0
+            ? mine.map(a => {
+                const j = jobs.find(j => j.id === a.jobId);
+                if (!j) return null;
+                return (
+                  <div key={a.id} className="app-row" onClick={() => { setSelectedJob(j); setPage('job-detail'); }}>
+                    <div className="app-job-logo">{j.logo}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="app-job-title">{j.title}</div>
+                      <div className="app-job-co">{j.company} · {j.location}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                      <span className={`badge badge-${a.status}`}>{a.status}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--slate)' }}>
+                        {new Date(a.appliedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            : (
+              <div className="empty">
+                <div className="empty-icon">◌</div>
+                <div className="empty-title">No applications yet</div>
+                <div className="empty-sub">Browse open roles and apply to start tracking here.</div>
+                <button className="btn-primary" style={{ margin: '1.5rem auto 0', display: 'flex' }} onClick={() => setPage('jobs')}>
+                  Browse jobs <Icon.Arrow />
+                </button>
+              </div>
+            )
+        )}
+
+        {tab === 'profile' && <ProfileForm user={user} onUpdate={updateProfile} isEmployer={false} />}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────── */
+function Footer() {
+  const { setPage } = useApp();
+  return (
+    <footer>
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div>
+            <div className="footer-brand-name">JobFlow</div>
+            <p className="footer-brand-sub">Curated jobs at companies building things worth working on. No noise. No algorithms. Just roles.</p>
+          </div>
+          <div>
+            <div className="footer-col-title">Job seekers</div>
+            <button className="footer-col-link" onClick={() => setPage('jobs')}>Browse roles</button>
+            <button className="footer-col-link" onClick={() => setPage('register')}>Create account</button>
+            <button className="footer-col-link" onClick={() => setPage('can-dash')}>My dashboard</button>
+          </div>
+          <div>
+            <div className="footer-col-title">Employers</div>
+            <button className="footer-col-link" onClick={() => setPage('register')}>Post a role</button>
+            <button className="footer-col-link" onClick={() => setPage('login')}>Employer login</button>
+            <button className="footer-col-link" onClick={() => setPage('emp-dash')}>Dashboard</button>
+          </div>
+          <div>
+            <div className="footer-col-title">Company</div>
+            <button className="footer-col-link">About</button>
+            <button className="footer-col-link">Blog</button>
+            <button className="footer-col-link">Privacy</button>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <div className="footer-copy">© 2024 JobFlow · Built with care</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'rgba(255,255,255,0.15)' }}>v2.1 · Portfolio project</div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   APP SHELL
+───────────────────────────────────────────────────────── */
+function App() {
+  const { page } = useApp();
+  const showFooter = !['emp-dash', 'can-dash', 'login', 'register'].includes(page);
+
+  const pages = {
+    'home':       <HomePage />,
+    'jobs':       <JobsPage />,
+    'job-detail': <JobDetail />,
+    'login':      <AuthPage mode="login" />,
+    'register':   <AuthPage mode="register" />,
+    'emp-dash':   <EmpDash />,
+    'can-dash':   <CanDash />,
+  };
+
+  return (
+    <>
+      <Navbar />
+      <main>{pages[page] || <HomePage />}</main>
+      {showFooter && <Footer />}
+      <Toasts />
+    </>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   MOUNT
+───────────────────────────────────────────────────────── */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <AppProvider>
+    <App />
+  </AppProvider>
+);
+</script>
+</body>
+</html>

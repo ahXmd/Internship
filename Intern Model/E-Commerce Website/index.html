@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXEMART — Premium Tech Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6C5CE7;
+            --primary-dark: #5A4BD1;
+            --accent: #00CEC9;
+            --dark: #0a0a0a;
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        button, a, input, select {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid rgba(108, 92, 231, 0.9);
+            outline-offset: 2px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(108, 92, 231, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(108, 92, 231, 0.6); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes rotate-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
+        }
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes hero-gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent); }
+        }
+
+        .animate-fade-up { animation: fadeInUp 0.8s ease forwards; }
+        .animate-fade-down { animation: fadeInDown 0.6s ease forwards; }
+        .animate-fade { animation: fadeIn 0.6s ease forwards; }
+        .animate-slide-left { animation: slideInLeft 0.7s ease forwards; }
+        .animate-slide-right { animation: slideInRight 0.7s ease forwards; }
+        .animate-scale { animation: scaleIn 0.5s ease forwards; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+
+        /* Glass morphism */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-strong {
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #6C5CE7, #00CEC9, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-alt {
+            background: linear-gradient(135deg, #fff, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(108, 92, 231, 0.4);
+        }
+        .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.1);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #00CEC9, #55efc4);
+            color: #0a0a0a;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 206, 201, 0.4);
+        }
+
+        /* Product Card */
+        .product-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            opacity: 0;
+        }
+        .product-card.visible {
+            opacity: 1;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(108, 92, 231, 0.3);
+            box-shadow: 0 20px 60px rgba(108, 92, 231, 0.15), 0 0 0 1px rgba(108, 92, 231, 0.1);
+        }
+        .product-card .card-image {
+            overflow: hidden;
+            position: relative;
+        }
+        .product-card .card-image img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+        .product-card:hover .card-image img {
+            transform: scale(1.08);
+        }
+        .product-card .quick-actions {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(to top, rgba(10,10,10,0.9), transparent);
+        }
+        .product-card:hover .quick-actions {
+            bottom: 0;
+        }
+        .quick-action-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .quick-action-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+        .badge-new { background: var(--primary); color: white; }
+        .badge-sale { background: #e17055; color: white; }
+        .badge-hot { background: #d63031; color: white; }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .wishlist-btn:hover, .wishlist-btn.active {
+            background: #e74c3c;
+            border-color: #e74c3c;
+            transform: scale(1.1);
+        }
+
+        /* Rating Stars */
+        .stars { color: #feca57; display: flex; gap: 2px; }
+
+        /* Hero Section */
+        .hero-bg {
+            background: radial-gradient(ellipse at 30% 50%, rgba(108, 92, 231, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(0, 206, 201, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 0%, rgba(253, 121, 168, 0.08) 0%, transparent 40%);
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Navbar */
+        .navbar {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Cart Sidebar */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .cart-overlay.active { opacity: 1; visibility: visible; }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 420px;
+            max-width: 90vw;
+            height: 100vh;
+            background: #111;
+            z-index: 101;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(255,255,255,0.06);
+        }
+        .cart-sidebar.active { right: 0; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .modal-content {
+            background: #151515;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Checkout Modal */
+        .checkout-modal .modal-content {
+            max-width: 600px;
+        }
+
+        /* Product Detail Modal */
+        .detail-modal .modal-content {
+            max-width: 900px;
+        }
+
+        /* Input styles */
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        }
+        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.4s ease, fadeIn 0.4s ease;
+            min-width: 280px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .toast-success {
+            background: linear-gradient(135deg, rgba(0, 206, 201, 0.15), rgba(85, 239, 196, 0.15));
+            border: 1px solid rgba(0, 206, 201, 0.3);
+            color: #55efc4;
+        }
+        .toast-error {
+            background: linear-gradient(135deg, rgba(214, 48, 49, 0.15), rgba(225, 112, 85, 0.15));
+            border: 1px solid rgba(214, 48, 49, 0.3);
+            color: #fab1a0;
+        }
+        .toast-info {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(162, 155, 254, 0.15));
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            color: #a29bfe;
+        }
+
+        /* Category Pills */
+        .category-pill {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        .category-pill:hover {
+            border-color: rgba(108, 92, 231, 0.5);
+            color: white;
+        }
+        .category-pill.active {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Price Range Slider */
+        input[type="range"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.1);
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        /* Quantity Controls */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            font-size: 16px;
+        }
+        .qty-btn:hover { background: var(--primary); }
+        .qty-value {
+            width: 36px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        /* Progress Steps */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            border: 2px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .step-circle.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        .step-circle.completed {
+            border-color: #55efc4;
+            background: #55efc4;
+            color: #0a0a0a;
+        }
+        .step-line {
+            width: 60px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            transition: background 0.3s ease;
+        }
+        .step-line.active { background: var(--primary); }
+        .step-line.completed { background: #55efc4; }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 8px;
+            height: 16px;
+            top: -20px;
+            z-index: 400;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .mobile-menu.active { opacity: 1; visibility: visible; }
+
+        /* Ticker */
+        .ticker {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 20s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Product grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 16px;
+            }
+            .product-card .card-image img { height: 220px; }
+        }
+
+        /* Newsletter glow */
+        .newsletter-glow {
+            position: relative;
+        }
+        .newsletter-glow::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--accent), #fd79a8, var(--primary));
+            background-size: 300% 300%;
+            animation: hero-gradient 4s ease infinite;
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(8px);
+        }
+
+        /* Page transitions */
+        .page-section {
+            min-height: 100vh;
+        }
+
+        /* Cursor follower */
+        .cursor-follower {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(108, 92, 231, 0.5);
+            pointer-events: none;
+            z-index: 500;
+            transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-follower.hover {
+            width: 50px;
+            height: 50px;
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .cursor-follower { display: none; }
+        }
+
+        /* Smooth section reveals */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-section.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Checkout form tabs */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeInUp 0.4s ease; }
+    </style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Promo Ticker -->
+<div class="ticker bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 py-2 text-xs font-semibold tracking-wider">
+    <div class="ticker-content">
+        <span class="mx-8">🔥 SUMMER SALE — UP TO 50% OFF</span>
+        <span class="mx-8">🚀 FREE SHIPPING ON ORDERS OVER ₹4,999</span>
+        <span class="mx-8">⚡ NEW ARRIVALS EVERY WEEK</span>
+        <span class="mx-8">💎 EXCLUSIVE MEMBER REWARDS</span>
+        <span class="mx-8">🔥 SUMMER SALE — UP TO 50% OFF</span>
+        <span class="mx-8">🚀 FREE SHIPPING ON ORDERS OVER ₹4,999</span>
+        <span class="mx-8">⚡ NEW ARRIVALS EVERY WEEK</span>
+        <span class="mx-8">💎 EXCLUSIVE MEMBER REWARDS</span>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar fixed top-8 left-0 right-0 z-50 px-4 md:px-8 transition-all" id="navbar">
+    <div class="max-w-7xl mx-auto glass-strong rounded-2xl px-6 py-4 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="#" onclick="navigateTo('home')" class="flex items-center gap-2 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <span class="text-xl font-black tracking-tight">LUXE<span class="gradient-text">MART</span></span>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#" onclick="navigateTo('home')" class="nav-link text-sm font-medium text-white/70 hover:text-white transition-colors relative group">
+                Home
+                <span class="absolute bottom-[-4px] left-0 w-0 h-0.5 bg-purple-500 transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#products" onclick="navigateTo('products')" class="nav-link text-sm font-medium text-white/70 hover:text-white transition-colors relative group">
+                Shop
+                <span class="absolute bottom-[-4px] left-0 w-0 h-0.5 bg-purple-500 transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#categories" class="nav-link text-sm font-medium text-white/70 hover:text-white transition-colors relative group">
+                Categories
+                <span class="absolute bottom-[-4px] left-0 w-0 h-0.5 bg-purple-500 transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#deals" class="nav-link text-sm font-medium text-white/70 hover:text-white transition-colors relative group">
+                Deals
+                <span class="absolute bottom-[-4px] left-0 w-0 h-0.5 bg-purple-500 transition-all group-hover:w-full"></span>
+            </a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="flex items-center gap-3">
+            <!-- Search -->
+            <button onclick="toggleSearch()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </button>
+
+            <!-- Wishlist -->
+            <button onclick="navigateTo('wishlist')" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all relative">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span id="wishlistCount" class="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full text-[10px] font-bold flex items-center justify-center hidden">0</span>
+            </button>
+
+            <!-- Cart -->
+            <button onclick="toggleCart()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all relative" id="cartBtn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 rounded-full text-[10px] font-bold flex items-center justify-center hidden">0</span>
+            </button>
+
+            <!-- User -->
+            <button onclick="toggleAuthModal()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all" id="userBtn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </button>
+
+            <!-- Mobile Hamburger -->
+            <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+                <svg class="w-5 h-5" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="navigateTo('home');toggleMobileMenu()" class="text-2xl font-bold text-white/80 hover:text-white transition-colors">Home</a>
+    <a href="#products" onclick="navigateTo('products');toggleMobileMenu()" class="text-2xl font-bold text-white/80 hover:text-white transition-colors">Shop</a>
+    <a href="#categories" onclick="toggleMobileMenu()" class="text-2xl font-bold text-white/80 hover:text-white transition-colors">Categories</a>
+    <a href="#deals" onclick="toggleMobileMenu()" class="text-2xl font-bold text-white/80 hover:text-white transition-colors">Deals</a>
+    <button onclick="toggleMobileMenu()" class="mt-8 btn-secondary">Close</button>
+</div>
+
+<!-- Search Overlay -->
+<div class="modal-overlay" id="searchOverlay" onclick="if(event.target===this)toggleSearch()">
+    <div class="modal-content p-8">
+        <div class="flex items-center gap-4 mb-6">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="searchInput" class="form-input flex-1" placeholder="Search products..." oninput="handleSearch(this.value)" autofocus>
+        </div>
+        <div id="searchResults" class="max-h-80 overflow-y-auto space-y-2"></div>
+    </div>
+</div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="p-6 border-b border-white/10 flex items-center justify-between">
+        <h3 class="text-lg font-bold">Shopping Cart</h3>
+        <button onclick="toggleCart()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-6" id="cartItems">
+        <div class="flex flex-col items-center justify-center h-full text-center" id="emptyCart">
+            <svg class="w-20 h-20 text-white/10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <p class="text-white/40 font-medium">Your cart is empty</p>
+            <p class="text-white/20 text-sm mt-1">Add some items to get started</p>
+        </div>
+        <div id="cartItemsList" class="space-y-4"></div>
+    </div>
+    <div class="p-6 border-t border-white/10" id="cartFooter" style="display:none;">
+        <div class="space-y-2 mb-4">
+            <div class="flex justify-between text-sm text-white/60">
+                <span>Subtotal</span>
+                <span id="cartSubtotal">₹0.00</span>
+            </div>
+            <div class="flex justify-between text-sm text-white/60">
+                <span>Shipping</span>
+                <span id="cartShipping">Free</span>
+            </div>
+            <div class="flex justify-between text-lg font-bold mt-2 pt-2 border-t border-white/10">
+                <span>Total</span>
+                <span class="gradient-text" id="cartTotal">₹0.00</span>
+            </div>
+        </div>
+        <button onclick="openCheckout()" class="btn-primary w-full py-4 text-center rounded-xl font-bold">
+            Proceed to Checkout
+        </button>
+        <button onclick="clearCart()" class="w-full mt-2 text-center text-white/40 hover:text-white/70 text-sm transition-colors py-2">
+            Clear Cart
+        </button>
+    </div>
+</div>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal" onclick="if(event.target===this)toggleAuthModal()">
+    <div class="modal-content p-8">
+        <div id="authContent">
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold">Welcome Back</h3>
+                    <p class="text-white/40 text-sm mt-1">Sign in to your account</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Email</label>
+                        <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Password</label>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••">
+                    </div>
+                    <button onclick="handleLogin()" class="btn-primary w-full py-4 text-center rounded-xl font-bold">Sign In</button>
+                    <p class="text-center text-sm text-white/40">
+                        Don't have an account?
+                        <a href="#" onclick="showRegister()" class="text-purple-400 hover:text-purple-300 font-medium">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Register Form -->
+            <div id="registerForm" style="display:none">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-cyan-400 to-pink-400 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold">Create Account</h3>
+                    <p class="text-white/40 text-sm mt-1">Join our community today</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Full Name</label>
+                        <input type="text" id="regName" class="form-input" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Email</label>
+                        <input type="email" id="regEmail" class="form-input" placeholder="your@email.com">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Password</label>
+                        <input type="password" id="regPassword" class="form-input" placeholder="Min 6 characters">
+                    </div>
+                    <button onclick="handleRegister()" class="btn-accent w-full py-4 text-center rounded-xl font-bold">Create Account</button>
+                    <p class="text-center text-sm text-white/40">
+                        Already have an account?
+                        <a href="#" onclick="showLogin()" class="text-cyan-400 hover:text-cyan-300 font-medium">Sign In</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Logged In View -->
+            <div id="userProfile" style="display:none">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center mb-4 text-2xl font-bold" id="userAvatar">JD</div>
+                    <h3 class="text-2xl font-bold" id="userName">John Doe</h3>
+                    <p class="text-white/40 text-sm mt-1" id="userEmail">john@example.com</p>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/8 transition-colors cursor-pointer">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        <span class="text-sm font-medium">My Orders</span>
+                        <span class="ml-auto text-white/30 text-sm" id="orderCount">0 orders</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/8 transition-colors cursor-pointer" onclick="navigateTo('wishlist');toggleAuthModal()">
+                        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <span class="text-sm font-medium">Wishlist</span>
+                        <span class="ml-auto text-white/30 text-sm" id="wishlistCountProfile">0 items</span>
+                    </div>
+                    <button onclick="handleLogout()" class="btn-secondary w-full py-3 text-center rounded-xl mt-4">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay checkout-modal" id="checkoutModal" onclick="if(event.target===this)closeCheckout()">
+    <div class="modal-content p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold">Checkout</h3>
+            <button onclick="closeCheckout()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator mb-8">
+            <div class="step-circle active" id="step1">1</div>
+            <div class="step-line" id="line1"></div>
+            <div class="step-circle" id="step2">2</div>
+            <div class="step-line" id="line2"></div>
+            <div class="step-circle" id="step3">3</div>
+        </div>
+
+        <!-- Step 1: Shipping -->
+        <div class="tab-content active" id="checkoutStep1">
+            <h4 class="text-lg font-semibold mb-4">Shipping Information</h4>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">First Name</label>
+                        <input type="text" id="shipFirst" class="form-input" placeholder="John">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Last Name</label>
+                        <input type="text" id="shipLast" class="form-input" placeholder="Doe">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Address</label>
+                    <input type="text" id="shipAddress" class="form-input" placeholder="123 Main Street">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">City</label>
+                        <input type="text" id="shipCity" class="form-input" placeholder="New York">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">ZIP Code</label>
+                        <input type="text" id="shipZip" class="form-input" placeholder="10001">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Phone</label>
+                    <input type="tel" id="shipPhone" class="form-input" placeholder="+1 (555) 000-0000">
+                </div>
+                <button onclick="goToStep(2)" class="btn-primary w-full py-4 text-center rounded-xl font-bold mt-2">Continue to Payment</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Payment -->
+        <div class="tab-content" id="checkoutStep2">
+            <h4 class="text-lg font-semibold mb-4">Payment Details</h4>
+            <div class="space-y-4">
+                <div class="flex gap-3 mb-4">
+                    <div class="flex-1 p-3 rounded-xl border-2 border-purple-500 bg-purple-500/10 cursor-pointer text-center">
+                        <div class="text-sm font-semibold">💳 Card</div>
+                    </div>
+                    <div class="flex-1 p-3 rounded-xl border border-white/10 hover:border-white/20 cursor-pointer text-center transition-colors">
+                        <div class="text-sm font-semibold">📱 PayPal</div>
+                    </div>
+                    <div class="flex-1 p-3 rounded-xl border border-white/10 hover:border-white/20 cursor-pointer text-center transition-colors">
+                        <div class="text-sm font-semibold">🏦 Bank</div>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Card Number</label>
+                    <input type="text" id="cardNumber" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCardNumber(this)">
+                </div>
+                <div>
+                    <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Cardholder Name</label>
+                    <input type="text" id="cardName" class="form-input" placeholder="JOHN DOE">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">Expiry</label>
+                        <input type="text" id="cardExpiry" class="form-input" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-white/50 uppercase tracking-wider mb-1 block">CVC</label>
+                        <input type="text" id="cardCVC" class="form-input" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-2">
+                    <button onclick="goToStep(1)" class="btn-secondary flex-1 py-4 text-center rounded-xl">Back</button>
+                    <button onclick="goToStep(3)" class="btn-primary flex-1 py-4 text-center rounded-xl font-bold">Review Order</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Review -->
+        <div class="tab-content" id="checkoutStep3">
+            <h4 class="text-lg font-semibold mb-4">Order Review</h4>
+            <div id="reviewItems" class="space-y-3 max-h-48 overflow-y-auto mb-4"></div>
+            <div class="border-t border-white/10 pt-4 space-y-2">
+                <div class="flex justify-between text-sm text-white/60">
+                    <span>Subtotal</span><span id="reviewSubtotal">₹0</span>
+                </div>
+                <div class="flex justify-between text-sm text-white/60">
+                    <span>Shipping</span><span>Free</span>
+                </div>
+                <div class="flex justify-between text-sm text-white/60">
+                    <span>GST (18%)</span><span id="reviewTax">₹0</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold pt-2 border-t border-white/10">
+                    <span>Total</span><span class="gradient-text" id="reviewTotal">₹0</span>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="goToStep(2)" class="btn-secondary flex-1 py-4 text-center rounded-xl">Back</button>
+                <button onclick="placeOrder()" class="btn-accent flex-1 py-4 text-center rounded-xl font-bold" id="placeOrderBtn">
+                    Place Order
+                </button>
+            </div>
+        </div>
+
+        <!-- Success -->
+        <div class="tab-content" id="checkoutSuccess">
+            <div class="text-center py-8">
+                <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-400 to-cyan-400 flex items-center justify-center mb-6 animate-scale">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Order Placed! 🎉</h3>
+                <p class="text-white/50 mb-2">Thank you for your purchase.</p>
+                <p class="text-sm text-white/30 mb-6">Order #<span id="orderNumber"></span></p>
+                <button onclick="closeCheckout();clearCart();" class="btn-primary px-8 py-3 rounded-xl">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Detail Modal -->
+<div class="modal-overlay detail-modal" id="detailModal" onclick="if(event.target===this)closeDetail()">
+    <div class="modal-content p-0 overflow-hidden">
+        <div class="grid md:grid-cols-2">
+            <div class="relative bg-gradient-to-br from-white/5 to-white/0">
+                <img id="detailImage" src="" alt="" class="w-full h-72 md:h-full object-cover">
+                <button onclick="closeDetail()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-black/50 backdrop-blur flex items-center justify-center hover:bg-black/70 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-8">
+                <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider" id="detailCategory"></span>
+                <h2 class="text-2xl font-bold mt-2 mb-2" id="detailName"></h2>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="stars text-sm" id="detailStars"></div>
+                    <span class="text-sm text-white/40" id="detailReviews"></span>
+                </div>
+                <p class="text-white/50 text-sm leading-relaxed mb-6" id="detailDesc"></p>
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="text-3xl font-black gradient-text" id="detailPrice"></span>
+                    <span class="text-lg text-white/30 line-through" id="detailOriginal"></span>
+                </div>
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-sm text-white/50">Quantity:</span>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeDetailQty(-1)">−</button>
+                        <span class="qty-value" id="detailQty">1</span>
+                        <button class="qty-btn" onclick="changeDetailQty(1)">+</button>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="addDetailToCart()" class="btn-primary flex-1 py-4 text-center rounded-xl font-bold flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        Add to Cart
+                    </button>
+                    <button onclick="toggleDetailWishlist()" class="w-14 h-14 rounded-xl border border-white/10 hover:border-pink-500 flex items-center justify-center transition-all" id="detailWishBtn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    </button>
+                </div>
+                <div class="mt-6 grid grid-cols-3 gap-3 text-center">
+                    <div class="p-3 rounded-xl bg-white/5">
+                        <div class="text-xs text-white/40">🚚 Free Shipping</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-white/5">
+                        <div class="text-xs text-white/40">🔄 30-Day Return</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-white/5">
+                        <div class="text-xs text-white/40">🛡️ 2Y Warranty</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ====== MAIN CONTENT ====== -->
+<main id="mainContent">
+
+    <!-- ====== HERO SECTION ====== -->
+    <section class="hero-bg min-h-screen flex items-center relative overflow-hidden pt-28 pb-16" id="heroSection">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-500/8 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="animate-fade-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 text-sm font-medium">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    New Collection 2026
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black leading-[1.05] mb-6">
+                    Elevate Your
+                    <br>
+                    <span class="gradient-text">Tech Life</span>
+                </h1>
+                <p class="text-lg text-white/50 max-w-md mb-8 leading-relaxed">
+                    Discover premium electronics & accessories curated for the modern lifestyle. Unmatched quality, delivered with care.
+                </p>
+                <div class="flex flex-wrap gap-4 mb-12">
+                    <button onclick="navigateTo('products')" class="btn-primary px-8 py-4 text-lg flex items-center gap-2">
+                        Shop Now
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </button>
+                    <button class="btn-secondary px-8 py-4 text-lg" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Explore</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex gap-8">
+                    <div>
+                        <div class="text-2xl font-black gradient-text">50K+</div>
+                        <div class="text-xs text-white/40">Happy Customers</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black gradient-text">200+</div>
+                        <div class="text-xs text-white/40">Premium Products</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black gradient-text">4.9★</div>
+                        <div class="text-xs text-white/40">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Product Showcase -->
+            <div class="relative animate-slide-right">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 rounded-3xl blur-2xl"></div>
+                    <div class="relative glass rounded-3xl p-8 overflow-hidden">
+                        <img src="https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                             alt="Featured Product" class="w-full h-80 object-cover rounded-2xl animate-float">
+                        <div class="mt-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Featured</span>
+                                <span class="text-xs text-white/40">⭐ 4.9 (2.4k reviews)</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-1">AuraSound Pro Max</h3>
+                            <p class="text-sm text-white/40 mb-4">Wireless Noise-Cancelling Headphones</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-black gradient-text">₹28,999</span>
+                                    <span class="text-sm text-white/30 line-through">₹41,499</span>
+                                </div>
+                                <button onclick="addToCart(0)" class="btn-primary px-6 py-3 text-sm">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating badges -->
+                <div class="absolute -top-4 -right-4 glass rounded-2xl p-3 animate-float" style="animation-delay: 0.5s;">
+                    <div class="text-2xl">🎧</div>
+                </div>
+                <div class="absolute -bottom-4 -left-4 glass rounded-2xl px-4 py-3 animate-float" style="animation-delay: 1s;">
+                    <div class="text-sm font-bold text-green-400">30% OFF</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== BRAND LOGOS ====== -->
+    <section class="py-12 border-y border-white/5 reveal-section">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="flex items-center justify-around flex-wrap gap-8 opacity-30">
+                <span class="text-2xl font-black tracking-widest">SONY</span>
+                <span class="text-2xl font-black tracking-widest">APPLE</span>
+                <span class="text-2xl font-black tracking-widest">SAMSUNG</span>
+                <span class="text-2xl font-black tracking-widest">BOSE</span>
+                <span class="text-2xl font-black tracking-widest">CANON</span>
+                <span class="text-2xl font-black tracking-widest">LOGITECH</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== CATEGORIES ====== -->
+    <section class="py-24 reveal-section" id="categories">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-sm font-semibold text-purple-400 uppercase tracking-widest">Browse</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">Shop by Category</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div onclick="filterByCategory('All')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎧</div>
+                    <div class="text-sm font-semibold">Headphones</div>
+                    <div class="text-xs text-white/30 mt-1">24 products</div>
+                </div>
+                <div onclick="filterByCategory('Watches')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">⌚</div>
+                    <div class="text-sm font-semibold">Smartwatches</div>
+                    <div class="text-xs text-white/30 mt-1">18 products</div>
+                </div>
+                <div onclick="filterByCategory('Laptops')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💻</div>
+                    <div class="text-sm font-semibold">Laptops</div>
+                    <div class="text-xs text-white/30 mt-1">32 products</div>
+                </div>
+                <div onclick="filterByCategory('Cameras')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📷</div>
+                    <div class="text-sm font-semibold">Cameras</div>
+                    <div class="text-xs text-white/30 mt-1">15 products</div>
+                </div>
+                <div onclick="filterByCategory('Phones')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📱</div>
+                    <div class="text-sm font-semibold">Smartphones</div>
+                    <div class="text-xs text-white/30 mt-1">28 products</div>
+                </div>
+                <div onclick="filterByCategory('Accessories')" class="group glass rounded-2xl p-6 text-center cursor-pointer hover:border-purple-500/30 transition-all hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎮</div>
+                    <div class="text-sm font-semibold">Accessories</div>
+                    <div class="text-xs text-white/30 mt-1">45 products</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PRODUCTS SECTION ====== -->
+    <section class="py-24 reveal-section" id="products">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-sm font-semibold text-purple-400 uppercase tracking-widest">Our Products</span>
+                    <h2 class="text-4xl md:text-5xl font-black mt-2">Trending Now</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="sortSelect" onchange="sortProducts()" class="form-input py-2 px-4 text-sm w-44">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Top Rated</option>
+                        <option value="newest">Newest</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="flex flex-wrap gap-3 mb-10" id="filterPills">
+                <button class="category-pill active" onclick="filterByCategory('All')">All Products</button>
+                <button class="category-pill" onclick="filterByCategory('Headphones')">Headphones</button>
+                <button class="category-pill" onclick="filterByCategory('Watches')">Smartwatches</button>
+                <button class="category-pill" onclick="filterByCategory('Laptops')">Laptops</button>
+                <button class="category-pill" onclick="filterByCategory('Cameras')">Cameras</button>
+                <button class="category-pill" onclick="filterByCategory('Phones')">Smartphones</button>
+                <button class="category-pill" onclick="filterByCategory('Accessories')">Accessories</button>
+            </div>
+
+            <!-- Price Range -->
+            <div class="glass rounded-2xl p-6 mb-10 flex flex-col md:flex-row items-center gap-6">
+                <div class="flex items-center gap-3 flex-1 w-full">
+                    <span class="text-sm text-white/50 whitespace-nowrap">Price Range:</span>
+                    <input type="range" min="0" max="165000" value="165000" step="1000" id="priceRange" oninput="filterByPrice(this.value)" class="flex-1">
+                    <span class="text-sm font-semibold text-purple-400 w-24 text-right" id="priceValue">₹1,65,000</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-white/50">Rating:</span>
+                    <div class="flex gap-1">
+                        <button onclick="filterByRating(0)" class="rating-filter-btn text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors active">All</button>
+                        <button onclick="filterByRating(4)" class="rating-filter-btn text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">4+⭐</button>
+                        <button onclick="filterByRating(4.5)" class="rating-filter-btn text-sm px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">4.5+⭐</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid"></div>
+
+            <!-- No Results -->
+            <div class="hidden text-center py-20" id="noResults">
+                <div class="text-6xl mb-4">🔍</div>
+                <h3 class="text-xl font-bold mb-2">No products found</h3>
+                <p class="text-white/40">Try adjusting your filters</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== DEALS SECTION ====== -->
+    <section class="py-24 reveal-section relative overflow-hidden" id="deals">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-cyan-900/20"></div>
+        <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Deal Card 1 -->
+                <div class="glass rounded-3xl p-8 md:p-12 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
+                    <span class="inline-block px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-bold mb-4">⏰ LIMITED TIME</span>
+                    <h3 class="text-3xl font-black mb-2">Flash Sale</h3>
+                    <p class="text-white/50 mb-6">Up to 50% off on selected headphones & speakers</p>
+                    <div class="flex gap-3 mb-6" id="countdownTimer">
+                        <div class="glass rounded-xl p-3 text-center min-w-[60px]">
+                            <div class="text-2xl font-black" id="hours">12</div>
+                            <div class="text-[10px] text-white/40 uppercase">Hours</div>
+                        </div>
+                        <div class="glass rounded-xl p-3 text-center min-w-[60px]">
+                            <div class="text-2xl font-black" id="minutes">45</div>
+                            <div class="text-[10px] text-white/40 uppercase">Min</div>
+                        </div>
+                        <div class="glass rounded-xl p-3 text-center min-w-[60px]">
+                            <div class="text-2xl font-black" id="seconds">30</div>
+                            <div class="text-[10px] text-white/40 uppercase">Sec</div>
+                        </div>
+                    </div>
+                    <button onclick="navigateTo('products')" class="btn-primary px-6 py-3">Shop the Sale →</button>
+                </div>
+                <!-- Deal Card 2 -->
+                <div class="glass rounded-3xl p-8 md:p-12 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all"></div>
+                    <span class="inline-block px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold mb-4">🎁 EXCLUSIVE</span>
+                    <h3 class="text-3xl font-black mb-2">New Member Deal</h3>
+                    <p class="text-white/50 mb-6">Get 15% off your first order when you sign up today</p>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="glass rounded-xl px-4 py-3 font-mono text-lg font-bold tracking-widest text-cyan-400">WELCOME15</div>
+                        <button onclick="navigator.clipboard.writeText('WELCOME15');showToast('Coupon copied!','success')" class="glass rounded-xl px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">Copy</button>
+                    </div>
+                    <button onclick="toggleAuthModal()" class="btn-accent px-6 py-3">Sign Up Now →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FEATURES ====== -->
+    <section class="py-24 reveal-section">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass rounded-2xl p-6 text-center group hover:border-purple-500/30 transition-all">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🚚</div>
+                    <h4 class="font-bold text-sm mb-1">Free Shipping</h4>
+                    <p class="text-xs text-white/40">On orders over ₹4,999</p>
+                </div>
+                <div class="glass rounded-2xl p-6 text-center group hover:border-purple-500/30 transition-all">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🔄</div>
+                    <h4 class="font-bold text-sm mb-1">Easy Returns</h4>
+                    <p class="text-xs text-white/40">30-day return policy</p>
+                </div>
+                <div class="glass rounded-2xl p-6 text-center group hover:border-purple-500/30 transition-all">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">🛡️</div>
+                    <h4 class="font-bold text-sm mb-1">Secure Payment</h4>
+                    <p class="text-xs text-white/40">100% protected</p>
+                </div>
+                <div class="glass rounded-2xl p-6 text-center group hover:border-purple-500/30 transition-all">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">💬</div>
+                    <h4 class="font-bold text-sm mb-1">24/7 Support</h4>
+                    <p class="text-xs text-white/40">Always here to help</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== TESTIMONIALS ====== -->
+    <section class="py-24 reveal-section">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="text-center mb-16">
+                <span class="text-sm font-semibold text-purple-400 uppercase tracking-widest">Reviews</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">What Customers Say</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass rounded-2xl p-8 hover:border-purple-500/20 transition-all">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-6">"The AuraSound Pro headphones are incredible. Best noise cancellation I've ever experienced. Worth every penny!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center text-sm font-bold">SK</div>
+                        <div>
+                            <div class="text-sm font-semibold">Sarah K.</div>
+                            <div class="text-xs text-white/30">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-8 hover:border-purple-500/20 transition-all">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-6">"Fast delivery, premium packaging, and the smartwatch exceeded my expectations. LuxeMart is now my go-to store!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-sm font-bold">MR</div>
+                        <div>
+                            <div class="text-sm font-semibold">Mike R.</div>
+                            <div class="text-xs text-white/30">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-8 hover:border-purple-500/20 transition-all">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-white/60 text-sm leading-relaxed mb-6">"Amazing customer service and the mechanical keyboard I bought has transformed my work setup. Highly recommend!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-cyan-400 flex items-center justify-center text-sm font-bold">AL</div>
+                        <div>
+                            <div class="text-sm font-semibold">Anna L.</div>
+                            <div class="text-xs text-white/30">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== NEWSLETTER ====== -->
+    <section class="py-24 reveal-section">
+        <div class="max-w-3xl mx-auto px-4 md:px-8 text-center">
+            <h2 class="text-4xl font-black mb-4">Stay in the Loop</h2>
+            <p class="text-white/40 mb-8">Subscribe to get exclusive deals, new arrivals, and insider news.</p>
+            <div class="newsletter-glow inline-flex w-full max-w-md">
+                <div class="flex w-full bg-[#151515] rounded-xl overflow-hidden">
+                    <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 bg-transparent text-white outline-none text-sm" id="newsletterEmail">
+                    <button onclick="subscribeNewsletter()" class="btn-primary rounded-none rounded-r-xl px-6 whitespace-nowrap">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="border-t border-white/5 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-black">LUXEMART</span>
+                    </div>
+                    <p class="text-sm text-white/40 leading-relaxed">Premium tech products for the modern lifestyle. Quality you can trust.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-4">Shop</h4>
+                    <ul class="space-y-2 text-sm text-white/40">
+                        <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Best Sellers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Sale Items</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-white/40">
+                        <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Returns</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-white/40">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-white/30">© 2026 LuxeMart. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-white/40 hover:text-white">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-white/40 hover:text-white">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-white/40 hover:text-white">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<script>
+// ====== PRODUCT DATA ======
+const products = [
+    {
+        id: 0, name: "AuraSound Pro Max", price: 28999, originalPrice: 41499, category: "Headphones",
+        image: "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.9, reviews: 2400, badge: "hot", desc: "Premium wireless noise-cancelling headphones with 40-hour battery life, adaptive EQ, and spatial audio for an immersive listening experience.",
+        date: "2026-01-15"
+    },
+    {
+        id: 1, name: "StellarBuds Elite", price: 16499, originalPrice: 20699, category: "Headphones",
+        image: "https://images.pexels.com/photos/3394653/pexels-photo-3394653.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.7, reviews: 1850, badge: "new", desc: "True wireless earbuds with crystal-clear audio, active noise cancellation, and a sleek charging case. IPX5 water resistant.",
+        date: "2026-03-01"
+    },
+    {
+        id: 2, name: "NightOwl Studio", price: 23149, originalPrice: 28999, category: "Headphones",
+        image: "https://images.pexels.com/photos/15840650/pexels-photo-15840650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.8, reviews: 960, badge: "sale", desc: "Professional studio-grade headphones with Hi-Res audio certification. Designed for audiophiles and music producers.",
+        date: "2025-11-20"
+    },
+    {
+        id: 3, name: "Pulse Ultra Watch", price: 37249, originalPrice: 49699, category: "Watches",
+        image: "https://images.pexels.com/photos/31541678/pexels-photo-31541678.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.8, reviews: 3200, badge: "hot", desc: "Next-gen smartwatch with health monitoring, GPS, always-on display, and 5-day battery life. Your fitness companion.",
+        date: "2026-02-10"
+    },
+    {
+        id: 4, name: "Chrono Fit Pro", price: 27299, originalPrice: 33099, category: "Watches",
+        image: "https://images.pexels.com/photos/12564670/pexels-photo-12564670.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.6, reviews: 1540, badge: "new", desc: "Rugged smartwatch built for athletes. Tracks 100+ workout types with advanced metrics and recovery insights.",
+        date: "2026-04-05"
+    },
+    {
+        id: 5, name: "ZenBook ProArt", price: 157499, originalPrice: 182399, category: "Laptops",
+        image: "https://images.pexels.com/photos/18311089/pexels-photo-18311089.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.9, reviews: 870, badge: "hot", desc: "Ultra-thin creator laptop with 4K OLED display, Intel i9 processor, 32GB RAM, and NVIDIA RTX 4070 graphics.",
+        date: "2026-01-20"
+    },
+    {
+        id: 6, name: "SwiftBook Air 15", price: 107799, originalPrice: 124399, category: "Laptops",
+        image: "https://images.pexels.com/photos/4533076/pexels-photo-4533076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.7, reviews: 2100, badge: "sale", desc: "Lightweight 15-inch laptop perfect for work and play. All-day battery, M3 chip, and stunning Retina display.",
+        date: "2025-12-15"
+    },
+    {
+        id: 7, name: "Canon ProShot R7", price: 132699, originalPrice: 157499, category: "Cameras",
+        image: "https://images.pexels.com/photos/9660955/pexels-photo-9660955.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.8, reviews: 650, badge: "new", desc: "Professional mirrorless camera with 45MP sensor, 8K video, and advanced autofocus system. For serious photographers.",
+        date: "2026-03-10"
+    },
+    {
+        id: 8, name: "LensMax 4K Cinema", price: 74549, originalPrice: 91149, category: "Cameras",
+        image: "https://images.pexels.com/photos/16013967/pexels-photo-16013967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.5, reviews: 430, badge: "sale", desc: "Compact cinema camera with stunning 4K ProRes recording. Perfect for filmmakers and content creators on the go.",
+        date: "2025-10-01"
+    },
+    {
+        id: 9, name: "Galaxy Nova Ultra", price: 99449, originalPrice: 115999, category: "Phones",
+        image: "https://images.pexels.com/photos/7989741/pexels-photo-7989741.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.7, reviews: 5600, badge: "hot", desc: "Flagship smartphone with 200MP camera, 6.8\" Dynamic AMOLED display, S-Pen support, and all-day battery.",
+        date: "2026-02-28"
+    },
+    {
+        id: 10, name: "Pixel Vision 9", price: 74549, originalPrice: 82899, category: "Phones",
+        image: "https://images.pexels.com/photos/11120516/pexels-photo-11120516.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.6, reviews: 3400, badge: "new", desc: "AI-powered smartphone with the best camera in its class. Pure Android experience with 7 years of updates.",
+        date: "2026-04-15"
+    },
+    {
+        id: 11, name: "MechStrike RGB Pro", price: 13999, originalPrice: 18149, category: "Accessories",
+        image: "https://images.pexels.com/photos/8219211/pexels-photo-8219211.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.8, reviews: 2800, badge: "sale", desc: "Mechanical gaming keyboard with hot-swappable switches, per-key RGB lighting, and aircraft-grade aluminum frame.",
+        date: "2025-09-01"
+    },
+    {
+        id: 12, name: "GamePad Elite Set", price: 10699, originalPrice: 14849, category: "Accessories",
+        image: "https://images.pexels.com/photos/4225229/pexels-photo-4225229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.5, reviews: 1200, badge: "new", desc: "Complete gaming accessories bundle — controller, headset, and mousepad. Everything you need for an epic gaming setup.",
+        date: "2026-05-01"
+    },
+    {
+        id: 13, name: "B&O Beoplay A5", price: 49699, originalPrice: 66249, category: "Accessories",
+        image: "https://images.pexels.com/photos/29581125/pexels-photo-29581125.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.9, reviews: 780, badge: "hot", desc: "Premium wireless home speaker with room-filling 360° sound. Handcrafted with sustainable materials and timeless design.",
+        date: "2026-01-01"
+    },
+    {
+        id: 14, name: "AuraCase Travel", price: 6549, originalPrice: 8199, category: "Headphones",
+        image: "https://images.pexels.com/photos/3394651/pexels-photo-3394651.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.4, reviews: 560, badge: null, desc: "Premium carrying case for headphones with hard shell protection, custom foam interior, and cable management pocket.",
+        date: "2025-08-15"
+    },
+    {
+        id: 15, name: "Vintage Pentax K1000", price: 37999, originalPrice: 49699, category: "Cameras",
+        image: "https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        rating: 4.7, reviews: 320, badge: "sale", desc: "Restored vintage Pentax K1000 film camera. A timeless classic for film photography enthusiasts and collectors.",
+        date: "2025-07-01"
+    },
+];
+
+// ====== STATE ======
+let cart = JSON.parse(localStorage.getItem('luxemart_cart') || '[]');
+let wishlist = JSON.parse(localStorage.getItem('luxemart_wishlist') || '[]');
+let currentUser = JSON.parse(localStorage.getItem('luxemart_user') || 'null');
+let users = JSON.parse(localStorage.getItem('luxemart_users') || '[]');
+let orders = JSON.parse(localStorage.getItem('luxemart_orders') || '[]');
+let activeCategory = 'All';
+let activeMaxPrice = 165000;
+let activeMinRating = 0;
+let currentDetailProduct = null;
+let detailQty = 1;
+
+// INR Currency Formatter
+function formatINR(num) {
+    return '₹' + num.toLocaleString('en-IN');
+}
+
+// ====== INIT ======
+document.addEventListener('DOMContentLoaded', () => {
+    renderProducts();
+    updateCartUI();
+    updateWishlistUI();
+    updateAuthUI();
+    initScrollAnimations();
+    initCursorFollower();
+    startCountdown();
+    initNavbarScroll();
+});
+
+// ====== CURSOR FOLLOWER ======
+function initCursorFollower() {
+    const cursor = document.getElementById('cursorFollower');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('button, a, .product-card, input, select').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+}
+
+// ====== NAVBAR SCROLL ======
+function initNavbarScroll() {
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+            navbar.style.top = '0';
+        } else {
+            navbar.classList.remove('scrolled');
+            navbar.style.top = '2rem';
+        }
+    });
+}
+
+// ====== SCROLL REVEAL ======
+function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                if (entry.target.classList.contains('product-card')) {
+                    entry.target.classList.add('visible');
+                }
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal-section, .product-card').forEach(el => observer.observe(el));
+}
+
+// ====== PRODUCTS ======
+function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    let filtered = [...products];
+
+    // Category filter
+    if (activeCategory !== 'All') {
+        filtered = filtered.filter(p => p.category === activeCategory);
+    }
+
+    // Price filter
+    filtered = filtered.filter(p => p.price <= activeMaxPrice);
+
+    // Rating filter
+    if (activeMinRating > 0) {
+        filtered = filtered.filter(p => p.rating >= activeMinRating);
+    }
+
+    // Sort
+    const sort = document.getElementById('sortSelect')?.value || 'featured';
+    switch(sort) {
+        case 'price-low': filtered.sort((a,b) => a.price - b.price); break;
+        case 'price-high': filtered.sort((a,b) => b.price - a.price); break;
+        case 'rating': filtered.sort((a,b) => b.rating - a.rating); break;
+        case 'newest': filtered.sort((a,b) => new Date(b.date) - new Date(a.date)); break;
+    }
+
+    document.getElementById('noResults').classList.toggle('hidden', filtered.length > 0);
+
+    grid.innerHTML = filtered.map((p, i) => `
+        <div class="product-card" style="animation-delay: ${i * 0.08}s" onclick="openDetail(${p.id})">
+            <div class="card-image relative">
+                ${p.badge ? `<span class="badge badge-${p.badge}">${p.badge === 'hot' ? '🔥 Hot' : p.badge === 'new' ? '✨ New' : '💰 Sale'}</span>` : ''}
+                <button class="wishlist-btn ${wishlist.includes(p.id) ? 'active' : ''}" onclick="event.stopPropagation();toggleWishlist(${p.id})">
+                    <svg class="w-4 h-4" fill="${wishlist.includes(p.id) ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </button>
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="event.stopPropagation();addToCart(${p.id})" title="Add to Cart">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    </button>
+                    <button class="quick-action-btn" onclick="event.stopPropagation();openDetail(${p.id})" title="Quick View">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-semibold text-purple-400 uppercase tracking-wider">${p.category}</span>
+                    <div class="flex items-center gap-1 text-xs text-white/40">
+                        <span class="text-yellow-400">★</span> ${p.rating}
+                        <span>(${p.reviews > 1000 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-base mb-3 group-hover:text-purple-300 transition-colors">${p.name}</h3>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-xl font-black">${formatINR(p.price)}</span>
+                        ${p.originalPrice ? `<span class="text-sm text-white/30 line-through">${formatINR(p.originalPrice)}</span>` : ''}
+                    </div>
+                    <button onclick="event.stopPropagation();addToCart(${p.id})" class="w-10 h-10 rounded-xl bg-purple-500/20 hover:bg-purple-500 text-purple-400 hover:text-white flex items-center justify-center transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Re-observe for animations
+    setTimeout(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.product-card').forEach(el => observer.observe(el));
+    }, 50);
+}
+
+function filterByCategory(cat) {
+    activeCategory = cat;
+    document.querySelectorAll('.category-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim().includes(cat) || (cat === 'All' && btn.textContent.trim() === 'All Products'));
+    });
+    renderProducts();
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filterByPrice(val) {
+    activeMaxPrice = parseInt(val);
+    document.getElementById('priceValue').textContent = formatINR(parseInt(val));
+    renderProducts();
+}
+
+function filterByRating(r) {
+    activeMinRating = r;
+    document.querySelectorAll('.rating-filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    renderProducts();
+}
+
+function sortProducts() {
+    renderProducts();
+}
+
+// ====== PRODUCT DETAIL ======
+function openDetail(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    currentDetailProduct = p;
+    detailQty = 1;
+
+    document.getElementById('detailImage').src = p.image;
+    document.getElementById('detailCategory').textContent = p.category;
+    document.getElementById('detailName').textContent = p.name;
+    document.getElementById('detailDesc').textContent = p.desc;
+    document.getElementById('detailPrice').textContent = formatINR(p.price);
+    document.getElementById('detailOriginal').textContent = p.originalPrice ? formatINR(p.originalPrice) : '';
+    document.getElementById('detailQty').textContent = '1';
+    document.getElementById('detailReviews').textContent = `(${p.reviews} reviews)`;
+
+    const starsHtml = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '');
+    document.getElementById('detailStars').textContent = starsHtml;
+
+    const wishBtn = document.getElementById('detailWishBtn');
+    wishBtn.classList.toggle('bg-pink-500/20', wishlist.includes(id));
+    wishBtn.querySelector('svg').setAttribute('fill', wishlist.includes(id) ? 'currentColor' : 'none');
+
+    document.getElementById('detailModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+    document.getElementById('detailModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function changeDetailQty(delta) {
+    detailQty = Math.max(1, Math.min(10, detailQty + delta));
+    document.getElementById('detailQty').textContent = detailQty;
+}
+
+function addDetailToCart() {
+    if (!currentDetailProduct) return;
+    for (let i = 0; i < detailQty; i++) {
+        addToCart(currentDetailProduct.id, true);
+    }
+    showToast(`${detailQty}x ${currentDetailProduct.name} added to cart`, 'success');
+    closeDetail();
+}
+
+function toggleDetailWishlist() {
+    if (!currentDetailProduct) return;
+    toggleWishlist(currentDetailProduct.id);
+    const wishBtn = document.getElementById('detailWishBtn');
+    const isWished = wishlist.includes(currentDetailProduct.id);
+    wishBtn.classList.toggle('bg-pink-500/20', isWished);
+    wishBtn.querySelector('svg').setAttribute('fill', isWished ? 'currentColor' : 'none');
+}
+
+// ====== CART ======
+function addToCart(id, silent = false) {
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push({ id, qty: 1 });
+    }
+    saveCart();
+    updateCartUI();
+    if (!silent) {
+        const p = products.find(x => x.id === id);
+        showToast(`${p.name} added to cart`, 'success');
+    }
+    // Animate cart icon
+    const cartBtn = document.getElementById('cartBtn');
+    cartBtn.style.animation = 'cartBounce 0.4s ease';
+    setTimeout(() => cartBtn.style.animation = '', 400);
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    saveCart();
+    updateCartUI();
+}
+
+function updateCartQty(id, delta) {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+        removeFromCart(id);
+        return;
+    }
+    saveCart();
+    updateCartUI();
+}
+
+function clearCart() {
+    cart = [];
+    saveCart();
+    updateCartUI();
+    showToast('Cart cleared', 'info');
+}
+
+function saveCart() {
+    localStorage.setItem('luxemart_cart', JSON.stringify(cart));
+}
+
+function updateCartUI() {
+    const countEl = document.getElementById('cartCount');
+    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
+    if (totalItems > 0) {
+        countEl.textContent = totalItems;
+        countEl.classList.remove('hidden');
+    } else {
+        countEl.classList.add('hidden');
+    }
+
+    const listEl = document.getElementById('cartItemsList');
+    const emptyEl = document.getElementById('emptyCart');
+    const footerEl = document.getElementById('cartFooter');
+
+    if (cart.length === 0) {
+        emptyEl.style.display = 'flex';
+        listEl.innerHTML = '';
+        footerEl.style.display = 'none';
+        return;
+    }
+
+    emptyEl.style.display = 'none';
+    footerEl.style.display = 'block';
+
+    let subtotal = 0;
+    listEl.innerHTML = cart.map(item => {
+        const p = products.find(x => x.id === item.id);
+        if (!p) return '';
+        const itemTotal = p.price * item.qty;
+        subtotal += itemTotal;
+        return `
+            <div class="flex gap-4 p-3 rounded-xl bg-white/5 animate-fade" data-id="${item.id}">
+                <img src="${p.image}" alt="${p.name}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                <div class="flex-1 min-w-0">
+                    <h4 class="font-semibold text-sm truncate">${p.name}</h4>
+                    <p class="text-xs text-white/40 mt-0.5">${p.category}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="updateCartQty(${item.id}, -1)">−</button>
+                            <span class="qty-value">${item.qty}</span>
+                            <button class="qty-btn" onclick="updateCartQty(${item.id}, 1)">+</button>
+                        </div>
+                        <span class="font-bold text-sm">${formatINR(itemTotal)}</span>
+                    </div>
+                </div>
+                <button onclick="removeFromCart(${item.id})" class="self-start text-white/30 hover:text-red-400 transition-colors p-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    const shipping = subtotal >= 4999 ? 0 : 499;
+    document.getElementById('cartSubtotal').textContent = formatINR(subtotal);
+    document.getElementById('cartShipping').textContent = shipping === 0 ? 'Free' : formatINR(shipping);
+    document.getElementById('cartTotal').textContent = formatINR(subtotal + shipping);
+}
+
+function toggleCart() {
+    const overlay = document.getElementById('cartOverlay');
+    const sidebar = document.getElementById('cartSidebar');
+    const isOpen = sidebar.classList.contains('active');
+
+    if (isOpen) {
+        overlay.classList.remove('active');
+        sidebar.classList.remove('active');
+        document.body.style.overflow = '';
+    } else {
+        overlay.classList.add('active');
+        sidebar.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// ====== WISHLIST ======
+function toggleWishlist(id) {
+    const idx = wishlist.indexOf(id);
+    if (idx > -1) {
+        wishlist.splice(idx, 1);
+        showToast('Removed from wishlist', 'info');
+    } else {
+        wishlist.push(id);
+        showToast('Added to wishlist', 'success');
+    }
+    localStorage.setItem('luxemart_wishlist', JSON.stringify(wishlist));
+    updateWishlistUI();
+    renderProducts();
+}
+
+function updateWishlistUI() {
+    const countEl = document.getElementById('wishlistCount');
+    if (wishlist.length > 0) {
+        countEl.textContent = wishlist.length;
+        countEl.classList.remove('hidden');
+    } else {
+        countEl.classList.add('hidden');
+    }
+    const profileCount = document.getElementById('wishlistCountProfile');
+    if (profileCount) profileCount.textContent = `${wishlist.length} items`;
+}
+
+// ====== AUTH ======
+function toggleAuthModal() {
+    const modal = document.getElementById('authModal');
+    modal.classList.toggle('active');
+    if (modal.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+        updateAuthUI();
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('userProfile').style.display = 'none';
+}
+
+function showRegister() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+    document.getElementById('userProfile').style.display = 'none';
+}
+
+function updateAuthUI() {
+    if (currentUser) {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('userProfile').style.display = 'block';
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userEmail').textContent = currentUser.email;
+        document.getElementById('userAvatar').textContent = currentUser.name.split(' ').map(n=>n[0]).join('').toUpperCase();
+        const userOrders = orders.filter(o => o.email === currentUser.email);
+        document.getElementById('orderCount').textContent = `${userOrders.length} orders`;
+    } else {
+        showLogin();
+    }
+}
+
+function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!email || !password) {
+        showToast('Please fill in all fields', 'error');
+        return;
+    }
+
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('luxemart_user', JSON.stringify(currentUser));
+        updateAuthUI();
+        showToast(`Welcome back, ${user.name}!`, 'success');
+    } else {
+        // Auto-register for demo
+        const newUser = { name: email.split('@')[0], email, password };
+        users.push(newUser);
+        localStorage.setItem('luxemart_users', JSON.stringify(users));
+        currentUser = newUser;
+        localStorage.setItem('luxemart_user', JSON.stringify(currentUser));
+        updateAuthUI();
+        showToast(`Welcome, ${newUser.name}! Account created.`, 'success');
+    }
+}
+
+function handleRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+
+    if (!name || !email || !password) {
+        showToast('Please fill in all fields', 'error');
+        return;
+    }
+    if (password.length < 6) {
+        showToast('Password must be at least 6 characters', 'error');
+        return;
+    }
+    if (users.find(u => u.email === email)) {
+        showToast('Email already registered', 'error');
+        return;
+    }
+
+    const newUser = { name, email, password };
+    users.push(newUser);
+    localStorage.setItem('luxemart_users', JSON.stringify(users));
+    currentUser = newUser;
+    localStorage.setItem('luxemart_user', JSON.stringify(currentUser));
+    updateAuthUI();
+    showToast(`Account created! Welcome, ${name}!`, 'success');
+}
+
+function handleLogout() {
+    currentUser = null;
+    localStorage.removeItem('luxemart_user');
+    showLogin();
+    showToast('Signed out successfully', 'info');
+    toggleAuthModal();
+}
+
+// ====== CHECKOUT ======
+let currentStep = 1;
+
+function openCheckout() {
+    if (cart.length === 0) {
+        showToast('Your cart is empty', 'error');
+        return;
+    }
+    if (!currentUser) {
+        toggleCart();
+        toggleAuthModal();
+        showToast('Please sign in to checkout', 'info');
+        return;
+    }
+    toggleCart();
+    currentStep = 1;
+    updateCheckoutSteps();
+    document.getElementById('checkoutModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Pre-fill name
+    if (currentUser) {
+        const names = currentUser.name.split(' ');
+        document.getElementById('shipFirst').value = names[0] || '';
+        document.getElementById('shipLast').value = names.slice(1).join(' ') || '';
+    }
+}
+
+function closeCheckout() {
+    document.getElementById('checkoutModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function goToStep(step) {
+    // Validate current step
+    if (step > currentStep) {
+        if (currentStep === 1) {
+            const f = document.getElementById('shipFirst').value;
+            const l = document.getElementById('shipLast').value;
+            const a = document.getElementById('shipAddress').value;
+            const c = document.getElementById('shipCity').value;
+            const z = document.getElementById('shipZip').value;
+            if (!f || !l || !a || !c || !z) {
+                showToast('Please fill in all shipping fields', 'error');
+                return;
+            }
+        }
+        if (currentStep === 2) {
+            const cn = document.getElementById('cardNumber').value;
+            const cname = document.getElementById('cardName').value;
+            const ce = document.getElementById('cardExpiry').value;
+            const cc = document.getElementById('cardCVC').value;
+            if (!cn || !cname || !ce || !cc) {
+                showToast('Please fill in all payment fields', 'error');
+                return;
+            }
+        }
+    }
+
+    currentStep = step;
+    updateCheckoutSteps();
+
+    if (step === 3) {
+        populateReview();
+    }
+}
+
+function updateCheckoutSteps() {
+    for (let i = 1; i <= 3; i++) {
+        const stepEl = document.getElementById(`step${i}`);
+        const content = document.getElementById(`checkoutStep${i}`);
+        stepEl.classList.remove('active', 'completed');
+        content.classList.remove('active');
+
+        if (i < currentStep) stepEl.classList.add('completed');
+        else if (i === currentStep) stepEl.classList.add('active');
+
+        if (i === currentStep) content.classList.add('active');
+    }
+
+    document.getElementById('checkoutSuccess').classList.remove('active');
+
+    for (let i = 1; i <= 2; i++) {
+        const line = document.getElementById(`line${i}`);
+        line.classList.remove('active', 'completed');
+        if (i < currentStep) line.classList.add('completed');
+        else if (i === currentStep) line.classList.add('active');
+    }
+}
+
+function populateReview() {
+    const reviewItems = document.getElementById('reviewItems');
+    let subtotal = 0;
+
+    reviewItems.innerHTML = cart.map(item => {
+        const p = products.find(x => x.id === item.id);
+        const t = p.price * item.qty;
+        subtotal += t;
+        return `
+            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5">
+                <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
+                <div class="flex-1 min-w-0">
+                    <div class="text-sm font-medium truncate">${p.name}</div>
+                    <div class="text-xs text-white/40">Qty: ${item.qty}</div>
+                </div>
+                <span class="text-sm font-bold">${formatINR(t)}</span>
+            </div>
+        `;
+    }).join('');
+
+    const tax = Math.round(subtotal * 0.18);
+    const total = subtotal + tax;
+
+    document.getElementById('reviewSubtotal').textContent = formatINR(subtotal);
+    document.getElementById('reviewTax').textContent = formatINR(tax);
+    document.getElementById('reviewTotal').textContent = formatINR(total);
+}
+
+function placeOrder() {
+    const btn = document.getElementById('placeOrderBtn');
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+        const orderNum = 'LM' + Date.now().toString(36).toUpperCase();
+        const order = {
+            id: orderNum,
+            email: currentUser.email,
+            items: [...cart],
+            date: new Date().toISOString(),
+            total: cart.reduce((sum, item) => {
+                const p = products.find(x => x.id === item.id);
+                return sum + (p.price * item.qty);
+            }, 0)
+        };
+        orders.push(order);
+        localStorage.setItem('luxemart_orders', JSON.stringify(orders));
+
+        document.getElementById('orderNumber').textContent = orderNum;
+
+        // Hide all steps, show success
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById(`checkoutStep${i}`).classList.remove('active');
+            document.getElementById(`step${i}`).classList.add('completed');
+        }
+        document.getElementById('line1').classList.add('completed');
+        document.getElementById('line2').classList.add('completed');
+        document.getElementById('checkoutSuccess').classList.add('active');
+
+        btn.textContent = 'Place Order';
+        btn.disabled = false;
+
+        // Confetti
+        launchConfetti();
+
+        showToast('Order placed successfully! 🎉', 'success');
+    }, 2000);
+}
+
+// ====== CONFETTI ======
+function launchConfetti() {
+    const colors = ['#6C5CE7', '#00CEC9', '#fd79a8', '#feca57', '#55efc4', '#a29bfe'];
+    for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 1.5 + 's';
+        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 5000);
+    }
+}
+
+// ====== FORMAT HELPERS ======
+function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(.{4})/g, '$1 ').trim();
+    input.value = value;
+}
+
+function formatExpiry(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length >= 2) value = value.substring(0,2) + '/' + value.substring(2);
+    input.value = value;
+}
+
+// ====== SEARCH ======
+function toggleSearch() {
+    const overlay = document.getElementById('searchOverlay');
+    overlay.classList.toggle('active');
+    if (overlay.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('searchInput').focus(), 300);
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+function handleSearch(query) {
+    const results = document.getElementById('searchResults');
+    if (!query.trim()) {
+        results.innerHTML = '<p class="text-white/30 text-sm text-center py-4">Start typing to search...</p>';
+        return;
+    }
+
+    const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.category.toLowerCase().includes(query.toLowerCase()) ||
+        p.desc.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (filtered.length === 0) {
+        results.innerHTML = '<p class="text-white/30 text-sm text-center py-4">No products found</p>';
+        return;
+    }
+
+    results.innerHTML = filtered.map(p => `
+        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 cursor-pointer transition-colors" onclick="toggleSearch();openDetail(${p.id})">
+            <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover">
+            <div class="flex-1">
+                <div class="font-medium text-sm">${p.name}</div>
+                <div class="text-xs text-white/40">${p.category}</div>
+            </div>
+            <span class="font-bold text-sm">${formatINR(p.price)}</span>
+        </div>
+    `).join('');
+}
+
+// ====== TOAST ======
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    const icons = {
+        success: '✓',
+        error: '✕',
+        info: 'ℹ'
+    };
+
+    toast.innerHTML = `
+        <span class="text-lg">${icons[type]}</span>
+        <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ====== COUNTDOWN ======
+function startCountdown() {
+    const endTime = new Date().getTime() + (12 * 3600 + 45 * 60 + 30) * 1000;
+
+    function update() {
+        const now = new Date().getTime();
+        const diff = endTime - now;
+
+        if (diff <= 0) return;
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById('hours').textContent = h.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = s.toString().padStart(2, '0');
+    }
+
+    update();
+    setInterval(update, 1000);
+}
+
+// ====== NAVIGATION ======
+function navigateTo(page) {
+    if (page === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'products') {
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    } else if (page === 'wishlist') {
+        activeCategory = 'All';
+        renderProducts();
+        // Filter to show only wishlist items
+        const grid = document.getElementById('productsGrid');
+        const wishlistProducts = products.filter(p => wishlist.includes(p.id));
+        if (wishlistProducts.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-20">
+                    <div class="text-6xl mb-4">💝</div>
+                    <h3 class="text-xl font-bold mb-2">Your wishlist is empty</h3>
+                    <p class="text-white/40">Save items you love by clicking the heart icon</p>
+                </div>
+            `;
+        } else {
+            grid.innerHTML = wishlistProducts.map((p, i) => `
+                <div class="product-card visible" style="animation-delay: ${i * 0.08}s" onclick="openDetail(${p.id})">
+                    <div class="card-image relative">
+                        ${p.badge ? `<span class="badge badge-${p.badge}">${p.badge === 'hot' ? '🔥 Hot' : p.badge === 'new' ? '✨ New' : '💰 Sale'}</span>` : ''}
+                        <button class="wishlist-btn active" onclick="event.stopPropagation();toggleWishlist(${p.id})">
+                            <svg class="w-4 h-4" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                        <img src="${p.image}" alt="${p.name}" loading="lazy">
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" onclick="event.stopPropagation();addToCart(${p.id})">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-purple-400 uppercase tracking-wider">${p.category}</span>
+                            <div class="flex items-center gap-1 text-xs text-white/40">
+                                <span class="text-yellow-400">★</span> ${p.rating}
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base mb-3">${p.name}</h3>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-xl font-black">${formatINR(p.price)}</span>
+                                ${p.originalPrice ? `<span class="text-sm text-white/30 line-through">${formatINR(p.originalPrice)}</span>` : ''}
+                            </div>
+                            <button onclick="event.stopPropagation();addToCart(${p.id})" class="w-10 h-10 rounded-xl bg-purple-500/20 hover:bg-purple-500 text-purple-400 hover:text-white flex items-center justify-center transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// ====== MOBILE MENU ======
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+}
+
+// ====== NEWSLETTER ======
+function subscribeNewsletter() {
+    const email = document.getElementById('newsletterEmail').value.trim();
+    if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email', 'error');
+        return;
+    }
+    showToast('Subscribed! Check your inbox for welcome offers 🎉', 'success');
+    document.getElementById('newsletterEmail').value = '';
+}
+
+// ====== KEYBOARD SHORTCUTS ======
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.getElementById('searchOverlay').classList.remove('active');
+        document.getElementById('authModal').classList.remove('active');
+        document.getElementById('detailModal').classList.remove('active');
+        document.getElementById('checkoutModal').classList.remove('active');
+        if (document.getElementById('cartSidebar').classList.contains('active')) toggleCart();
+        document.body.style.overflow = '';
+    }
+    if (e.key === '/' && !e.target.matches('input, textarea')) {
+        e.preventDefault();
+        toggleSearch();
+    }
+});
+
+// Add smooth hover observer for new cards loaded dynamically
+const hoverObserver = new MutationObserver(() => {
+    const cursor = document.getElementById('cursorFollower');
+    document.querySelectorAll('button, a, .product-card, input, select').forEach(el => {
+        if (!el.dataset.cursorBound) {
+            el.dataset.cursorBound = 'true';
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        }
+    });
+});
+hoverObserver.observe(document.body, { childList: true, subtree: true });
+</script>
+
+</body>
+</html>

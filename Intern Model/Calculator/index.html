@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcKit — Smart Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light theme */
+            --bg: #f0f2f5;
+            --calc-bg: #ffffff;
+            --display-bg: #1b1d23;
+            --display-text: #f1f3f5;
+            --expression-text: #7c8187;
+            --btn-number-bg: #f0f2f5;
+            --btn-number-text: #1b1d23;
+            --btn-number-hover: #e4e6ea;
+            --btn-operator-bg: #e8edf4;
+            --btn-operator-text: #4a6cf7;
+            --btn-operator-hover: #dce3ef;
+            --btn-action-bg: #e8edf4;
+            --btn-action-text: #64748b;
+            --btn-action-hover: #dce3ef;
+            --btn-equals-bg: #4a6cf7;
+            --btn-equals-text: #ffffff;
+            --btn-equals-hover: #3b5de7;
+            --btn-clear-text: #ef4444;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --shadow-btn: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --border: #e5e7eb;
+            --radius: 16px;
+            --radius-btn: 14px;
+            --history-bg: #f8f9fa;
+            --history-border: #e5e7eb;
+            --history-text: #64748b;
+            --history-result: #1b1d23;
+            --toggle-bg: #e5e7eb;
+            --toggle-knob: #ffffff;
+            --mode-text: #64748b;
+            --kbd-bg: rgba(0,0,0,0.06);
+            --kbd-text: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f1117;
+            --calc-bg: #1b1d23;
+            --display-bg: #12141a;
+            --display-text: #f1f3f5;
+            --expression-text: #64686f;
+            --btn-number-bg: #252830;
+            --btn-number-text: #e4e6ea;
+            --btn-number-hover: #2e3039;
+            --btn-operator-bg: #1e2a4a;
+            --btn-operator-text: #6b8afc;
+            --btn-operator-hover: #253358;
+            --btn-action-bg: #252830;
+            --btn-action-text: #94a3b8;
+            --btn-action-hover: #2e3039;
+            --btn-equals-bg: #4a6cf7;
+            --btn-equals-text: #ffffff;
+            --btn-equals-hover: #5d7cfa;
+            --btn-clear-text: #f87171;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-btn: 0 1px 3px rgba(0, 0, 0, 0.15);
+            --border: #2a2d35;
+            --history-bg: #15171d;
+            --history-border: #252830;
+            --history-text: #555960;
+            --history-result: #c9cdd3;
+            --toggle-bg: #333740;
+            --toggle-knob: #e4e6ea;
+            --mode-text: #64686f;
+            --kbd-bg: rgba(255,255,255,0.06);
+            --kbd-text: #555960;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background 0.35s ease;
+        }
+
+        /* ── Main Container ── */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* ── Calculator Shell ── */
+        .calculator {
+            width: 370px;
+            background: var(--calc-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        /* ── Top Bar ── */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px 12px;
+        }
+
+        .top-bar-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--mode-text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-bar-title svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+
+        /* ── Theme Toggle ── */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle-label {
+            font-size: 11px;
+            color: var(--mode-text);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--toggle-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: none;
+            padding: 0;
+            outline: none;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: var(--toggle-knob);
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        [data-theme="dark"] .toggle-switch::after {
+            transform: translateX(20px);
+        }
+
+        [data-theme="dark"] .toggle-switch {
+            background: #4a6cf7;
+        }
+
+        /* ── Display ── */
+        .display {
+            background: var(--display-bg);
+            margin: 0 14px;
+            border-radius: 14px;
+            padding: 24px 22px 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.35s ease;
+        }
+
+        .display-expression {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--expression-text);
+            text-align: right;
+            min-height: 22px;
+            word-break: break-all;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .display-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--display-text);
+            text-align: right;
+            line-height: 1.1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: font-size 0.2s ease, color 0.3s ease;
+        }
+
+        .display-value.shrink-1 { font-size: 32px; }
+        .display-value.shrink-2 { font-size: 24px; }
+
+        /* cursor blink */
+        .display-value::after {
+            content: '';
+            display: inline-block;
+            width: 2px;
+            height: 0.85em;
+            background: #4a6cf7;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: cursor-blink 1s step-end infinite;
+            border-radius: 1px;
+        }
+
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ── Button Grid ── */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 14px;
+        }
+
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            padding: 18px 10px;
+            transition: all 0.15s ease;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-btn);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.94);
+        }
+
+        /* Ripple effect */
+        .btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0);
+            animation: ripple-anim 0.5s ease-out;
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .btn-number .ripple,
+        [data-theme="light"] .btn-action .ripple {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Number buttons */
+        .btn-number {
+            background: var(--btn-number-bg);
+            color: var(--btn-number-text);
+        }
+        .btn-number:hover { background: var(--btn-number-hover); }
+
+        /* Operator buttons */
+        .btn-operator {
+            background: var(--btn-operator-bg);
+            color: var(--btn-operator-text);
+            font-size: 20px;
+        }
+        .btn-operator:hover { background: var(--btn-operator-hover); }
+        .btn-operator.active {
+            background: #4a6cf7;
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(74, 108, 247, 0.35);
+        }
+
+        /* Action buttons (AC, ⌫, %) */
+        .btn-action {
+            background: var(--btn-action-bg);
+            color: var(--btn-action-text);
+        }
+        .btn-action:hover { background: var(--btn-action-hover); }
+
+        .btn-clear {
+            color: var(--btn-clear-text);
+        }
+
+        /* Equals button */
+        .btn-equals {
+            background: var(--btn-equals-bg);
+            color: var(--btn-equals-text);
+            grid-column: span 2;
+            font-size: 22px;
+            box-shadow: 0 2px 12px rgba(74, 108, 247, 0.25);
+        }
+        .btn-equals:hover {
+            background: var(--btn-equals-hover);
+            box-shadow: 0 4px 20px rgba(74, 108, 247, 0.35);
+        }
+
+        /* Zero button */
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        /* ── History Panel ── */
+        .history-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px 14px;
+        }
+
+        .history-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--mode-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .history-btn:hover {
+            background: var(--btn-number-hover);
+            border-color: var(--btn-operator-text);
+            color: var(--btn-operator-text);
+        }
+
+        .history-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .history-clear-btn {
+            background: none;
+            border: none;
+            color: var(--mode-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: none;
+        }
+        .history-clear-btn:hover {
+            color: var(--btn-clear-text);
+            background: rgba(239, 68, 68, 0.08);
+        }
+        .history-clear-btn.visible { display: block; }
+
+        .history-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 1px solid transparent;
+        }
+
+        .history-panel.open {
+            max-height: 240px;
+            border-top-color: var(--history-border);
+        }
+
+        .history-list {
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 8px 14px 14px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .history-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            text-align: right;
+        }
+
+        .history-item:hover {
+            background: var(--btn-number-bg);
+        }
+
+        .history-item-expression {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--history-text);
+            margin-bottom: 2px;
+        }
+
+        .history-item-result {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--history-result);
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 28px 14px;
+            color: var(--mode-text);
+            font-size: 13px;
+        }
+
+        .history-empty svg {
+            display: block;
+            margin: 0 auto 8px;
+            opacity: 0.3;
+        }
+
+        /* ── Keyboard Hints ── */
+        .keyboard-hints {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 10px;
+            max-width: 370px;
+        }
+
+        .kbd {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--kbd-bg);
+            color: var(--kbd-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .kbd-key {
+            background: var(--calc-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            font-size: 9px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* ── Error State ── */
+        .display.error .display-value {
+            color: #f87171;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            15% { transform: translateX(-6px); }
+            30% { transform: translateX(6px); }
+            45% { transform: translateX(-4px); }
+            60% { transform: translateX(4px); }
+            75% { transform: translateX(-2px); }
+            90% { transform: translateX(2px); }
+        }
+
+        .display.shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* ── Flash on result ── */
+        @keyframes result-flash {
+            0% { box-shadow: inset 0 0 0 0 rgba(74, 108, 247, 0.15); }
+            50% { box-shadow: inset 0 0 30px 0 rgba(74, 108, 247, 0.1); }
+            100% { box-shadow: inset 0 0 0 0 rgba(74, 108, 247, 0); }
+        }
+
+        .display.flash {
+            animation: result-flash 0.5s ease-out;
+        }
+
+        /* ── Button press visual on keyboard ── */
+        .btn.key-press {
+            transform: scale(0.94);
+            filter: brightness(0.92);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 400px) {
+            .calculator { width: 100%; border-radius: 0; border-left: none; border-right: none; }
+            body { align-items: flex-start; padding-top: 10px; }
+            .keyboard-hints { display: none; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="wrapper">
+        <!-- Calculator -->
+        <div class="calculator">
+
+            <!-- Top bar -->
+            <div class="top-bar">
+                <div class="top-bar-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="16" y1="14" x2="16" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/><line x1="16" y1="18" x2="16" y2="18.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/></svg>
+                    CalcKit
+                </div>
+                <div class="theme-toggle">
+                    <span class="theme-toggle-label" id="themeLabel">☀️</span>
+                    <button class="toggle-switch" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+                </div>
+            </div>
+
+            <!-- Display -->
+            <div class="display" id="display">
+                <div class="display-expression" id="expression"></div>
+                <div class="display-value" id="displayValue">0</div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="buttons">
+                <button class="btn btn-action btn-clear" data-key="Escape" onclick="handleAction('clear')">AC</button>
+                <button class="btn btn-action" data-key="Backspace" onclick="handleAction('delete')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+                </button>
+                <button class="btn btn-action" data-key="%" onclick="handleAction('percent')">%</button>
+                <button class="btn btn-operator" data-key="/" data-op="/" onclick="handleOperator('/')">÷</button>
+
+                <button class="btn btn-number" data-key="7" onclick="handleNumber('7')">7</button>
+                <button class="btn btn-number" data-key="8" onclick="handleNumber('8')">8</button>
+                <button class="btn btn-number" data-key="9" onclick="handleNumber('9')">9</button>
+                <button class="btn btn-operator" data-key="*" data-op="*" onclick="handleOperator('*')">×</button>
+
+                <button class="btn btn-number" data-key="4" onclick="handleNumber('4')">4</button>
+                <button class="btn btn-number" data-key="5" onclick="handleNumber('5')">5</button>
+                <button class="btn btn-number" data-key="6" onclick="handleNumber('6')">6</button>
+                <button class="btn btn-operator" data-key="-" data-op="-" onclick="handleOperator('-')">−</button>
+
+                <button class="btn btn-number" data-key="1" onclick="handleNumber('1')">1</button>
+                <button class="btn btn-number" data-key="2" onclick="handleNumber('2')">2</button>
+                <button class="btn btn-number" data-key="3" onclick="handleNumber('3')">3</button>
+                <button class="btn btn-operator" data-key="+" data-op="+" onclick="handleOperator('+')">+</button>
+
+                <button class="btn btn-number btn-zero" data-key="0" onclick="handleNumber('0')">0</button>
+                <button class="btn btn-number" data-key="." onclick="handleNumber('.')">.</button>
+                <button class="btn btn-equals" data-key="Enter" onclick="handleEquals()">=</button>
+            </div>
+
+            <!-- History toggle -->
+            <div class="history-toggle">
+                <button class="history-btn" id="historyBtn" onclick="toggleHistory()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    History
+                </button>
+                <button class="history-clear-btn" id="historyClearBtn" onclick="clearHistory()">Clear all</button>
+            </div>
+
+            <!-- History panel -->
+            <div class="history-panel" id="historyPanel">
+                <div class="history-list" id="historyList">
+                    <div class="history-empty" id="historyEmpty">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        No calculations yet
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Keyboard hints -->
+        <div class="keyboard-hints">
+            <span class="kbd"><span class="kbd-key">0–9</span> numbers</span>
+            <span class="kbd"><span class="kbd-key">+ − × ÷</span> ops</span>
+            <span class="kbd"><span class="kbd-key">Enter</span> =</span>
+            <span class="kbd"><span class="kbd-key">Esc</span> clear</span>
+            <span class="kbd"><span class="kbd-key">⌫</span> delete</span>
+        </div>
+    </div>
+
+    <script>
+        // ─── State ───
+        const state = {
+            current: '0',
+            previous: '',
+            operator: null,
+            resetNext: false,
+            history: JSON.parse(localStorage.getItem('calcHistory') || '[]'),
+            historyOpen: false
+        };
+
+        // ─── DOM refs ───
+        const dom = {
+            display: document.getElementById('display'),
+            value: document.getElementById('displayValue'),
+            expression: document.getElementById('expression'),
+            historyPanel: document.getElementById('historyPanel'),
+            historyList: document.getElementById('historyList'),
+            historyEmpty: document.getElementById('historyEmpty'),
+            historyClearBtn: document.getElementById('historyClearBtn')
+        };
+
+        const OPERATOR_MAP = {
+            '+': '+',
+            '-': '−',
+            '*': '×',
+            '/': '÷'
+        };
+
+        const MAX_DIGITS = 16;
+
+        // ─── Core Handlers ───
+
+        function handleNumber(digit) {
+            if (digit === '.') {
+                if (state.resetNext) {
+                    state.current = '0.';
+                    state.resetNext = false;
+                } else if (state.current.includes('.')) {
+                    triggerShake();
+                    return;
+                } else {
+                    state.current += '.';
+                }
+            } else {
+                if (state.resetNext) {
+                    state.current = digit;
+                    state.resetNext = false;
+                    clearActiveOperator();
+                } else if (state.current === '0') {
+                    state.current = digit;
+                } else {
+                    if (state.current.replace(/[^0-9]/g, '').length >= MAX_DIGITS) {
+                        triggerShake();
+                        return;
+                    }
+                    state.current += digit;
+                }
+            }
+            updateDisplay();
+        }
+
+        function handleOperator(op) {
+            if (state.operator && !state.resetNext) {
+                compute();
+            }
+            state.previous = state.current;
+            state.operator = op;
+            state.resetNext = true;
+
+            dom.expression.textContent = formatDisplay(state.previous) + ' ' + OPERATOR_MAP[op];
+
+            setActiveOperator(op);
+            updateDisplay();
+        }
+
+        function handleEquals() {
+            if (!state.operator) return;
+            if (state.resetNext && state.previous === state.current) return;
+
+            compute();
+        }
+
+        function handleAction(action) {
+            if (action === 'clear') {
+                state.current = '0';
+                state.previous = '';
+                state.operator = null;
+                state.resetNext = false;
+                dom.expression.textContent = '';
+                clearActiveOperator();
+                updateDisplay();
+            } else if (action === 'delete') {
+                if (state.resetNext) return;
+                if (state.current.length <= 1 || (state.current.length === 2 && state.current[0] === '-')) {
+                    state.current = '0';
+                } else {
+                    state.current = state.current.slice(0, -1);
+                }
+                updateDisplay();
+            } else if (action === 'percent') {
+                if (state.current === '0') return;
+                let num = parseFloat(state.current);
+                if (state.operator && state.previous) {
+                    // Contextual percent: 100 + 10% = 110
+                    num = parseFloat(state.previous) * (num / 100);
+                } else {
+                    num = num / 100;
+                }
+                state.current = cleanNumber(num);
+                updateDisplay();
+            }
+        }
+
+        // ─── Compute ───
+
+        function compute() {
+            const prev = parseFloat(state.previous);
+            const curr = parseFloat(state.current);
+            let result;
+
+            if (state.operator === '+') {
+                result = prev + curr;
+            } else if (state.operator === '-') {
+                result = prev - curr;
+            } else if (state.operator === '*') {
+                result = prev * curr;
+            } else if (state.operator === '/') {
+                if (curr === 0) {
+                    showError('Cannot divide by zero');
+                    return;
+                }
+                result = prev / curr;
+            } else {
+                return;
+            }
+
+            if (!isFinite(result)) {
+                showError('Overflow');
+                return;
+            }
+
+            result = cleanNumber(result);
+
+            const expressionStr = formatDisplay(state.previous) + ' ' + OPERATOR_MAP[state.operator] + ' ' + formatDisplay(state.current);
+            dom.expression.textContent = expressionStr + ' =';
+
+            addToHistory(expressionStr, result);
+
+            state.current = result;
+            state.previous = '';
+            state.operator = null;
+            state.resetNext = true;
+            clearActiveOperator();
+            updateDisplay();
+            triggerFlash();
+        }
+
+        function cleanNumber(num) {
+            // Round to 12 significant digits to avoid floating point noise
+            const result = parseFloat(num.toPrecision(12));
+            return String(result);
+        }
+
+        // ─── Display ───
+
+        function updateDisplay() {
+            let text = state.current;
+
+            if (text !== '' && text !== '-' && !text.endsWith('.')) {
+                text = formatDisplay(text);
+            }
+
+            dom.value.textContent = text;
+
+            // Dynamic font sizing
+            dom.value.classList.remove('shrink-1', 'shrink-2');
+            const len = state.current.length;
+            if (len > 13) {
+                dom.value.classList.add('shrink-2');
+            } else if (len > 9) {
+                dom.value.classList.add('shrink-1');
+            }
+        }
+
+        function formatDisplay(numStr) {
+            if (!numStr || numStr === '-') return numStr;
+            const num = parseFloat(numStr);
+            if (isNaN(num)) return numStr;
+
+            const parts = numStr.split('.');
+            let intPart = parts[0];
+            const decPart = parts.length > 1 ? '.' + parts[1] : '';
+
+            // Thousand separators
+            const isNeg = intPart.startsWith('-');
+            if (isNeg) intPart = intPart.slice(1);
+            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            if (isNeg) intPart = '-' + intPart;
+
+            return intPart + decPart;
+        }
+
+        // ─── Error ───
+
+        function showError(msg) {
+            dom.value.textContent = msg;
+            dom.value.classList.add('shrink-1');
+            dom.display.classList.add('error', 'shake');
+
+            setTimeout(() => {
+                dom.display.classList.remove('error', 'shake');
+                handleAction('clear');
+            }, 1400);
+        }
+
+        function triggerShake() {
+            dom.display.classList.add('shake');
+            setTimeout(() => dom.display.classList.remove('shake'), 400);
+        }
+
+        function triggerFlash() {
+            dom.display.classList.add('flash');
+            setTimeout(() => dom.display.classList.remove('flash'), 500);
+        }
+
+        // ─── Operator Highlighting ───
+
+        function setActiveOperator(op) {
+            clearActiveOperator();
+            const btn = document.querySelector(`.btn-operator[data-op="${op}"]`);
+            if (btn) btn.classList.add('active');
+        }
+
+        function clearActiveOperator() {
+            document.querySelectorAll('.btn-operator.active').forEach(b => b.classList.remove('active'));
+        }
+
+        // ─── Ripple Effect ───
+
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 500);
+            });
+        });
+
+        // ─── Keyboard Support ───
+
+        const KEY_MAP = {
+            '0': () => handleNumber('0'),
+            '1': () => handleNumber('1'),
+            '2': () => handleNumber('2'),
+            '3': () => handleNumber('3'),
+            '4': () => handleNumber('4'),
+            '5': () => handleNumber('5'),
+            '6': () => handleNumber('6'),
+            '7': () => handleNumber('7'),
+            '8': () => handleNumber('8'),
+            '9': () => handleNumber('9'),
+            '.': () => handleNumber('.'),
+            '+': () => handleOperator('+'),
+            '-': () => handleOperator('-'),
+            '*': () => handleOperator('*'),
+            '/': () => handleOperator('/'),
+            'Enter': () => handleEquals(),
+            '=': () => handleEquals(),
+            'Backspace': () => handleAction('delete'),
+            'Escape': () => handleAction('clear'),
+            'Delete': () => handleAction('clear'),
+            '%': () => handleAction('percent')
+        };
+
+        document.addEventListener('keydown', (e) => {
+            const handler = KEY_MAP[e.key];
+            if (!handler) return;
+            e.preventDefault();
+            handler();
+
+            // Visual feedback on the matching button
+            const keyAttr = e.key === '=' ? 'Enter' : e.key;
+            const btn = document.querySelector(`.btn[data-key="${keyAttr}"]`);
+            if (btn) {
+                btn.classList.add('key-press');
+                setTimeout(() => btn.classList.remove('key-press'), 150);
+            }
+        });
+
+        // ─── History ───
+
+        function addToHistory(expression, result) {
+            const entry = { expression, result, timestamp: Date.now() };
+            state.history.unshift(entry);
+            if (state.history.length > 50) state.history.pop();
+            saveHistory();
+            renderHistory();
+        }
+
+        function saveHistory() {
+            localStorage.setItem('calcHistory', JSON.stringify(state.history));
+        }
+
+        function renderHistory() {
+            // Clear existing items (keep empty message)
+            dom.historyList.querySelectorAll('.history-item').forEach(el => el.remove());
+
+            if (state.history.length === 0) {
+                dom.historyEmpty.style.display = 'block';
+                dom.historyClearBtn.classList.remove('visible');
+                return;
+            }
+
+            dom.historyEmpty.style.display = 'none';
+            dom.historyClearBtn.classList.add('visible');
+
+            state.history.forEach((entry, i) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <div class="history-item-expression">${entry.expression}</div>
+                    <div class="history-item-result">= ${formatDisplay(entry.result)}</div>
+                `;
+                item.addEventListener('click', () => {
+                    state.current = entry.result;
+                    state.resetNext = true;
+                    updateDisplay();
+                });
+                dom.historyList.appendChild(item);
+            });
+        }
+
+        function toggleHistory() {
+            state.historyOpen = !state.historyOpen;
+            dom.historyPanel.classList.toggle('open', state.historyOpen);
+        }
+
+        function clearHistory() {
+            state.history = [];
+            saveHistory();
+            renderHistory();
+        }
+
+        // ─── Theme Toggle ───
+
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', next);
+            document.getElementById('themeLabel').textContent = next === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('calcTheme', next);
+        }
+
+        // Load saved theme
+        (function initTheme() {
+            const saved = localStorage.getItem('calcTheme');
+            if (saved) {
+                document.body.setAttribute('data-theme', saved);
+                document.getElementById('themeLabel').textContent = saved === 'dark' ? '🌙' : '☀️';
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('themeLabel').textContent = '🌙';
+            }
+        })();
+
+        // Load saved history
+        renderHistory();
+    </script>
+</body>
+</html>

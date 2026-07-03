@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safie Ahamed - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<style>
+
+    :root{
+        --black: #0a0a0a;
+        --white: #f5f4f0;
+        --accent: #3b82f6;
+        --accent2: #6366f1;
+        --mid: #1a1a2e;
+        --card: #111827;
+        --muted: #9ca3af;
+        --border: #1f2937;
+        --grad: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    }
+
+*,*::before,*::after{ 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box; 
+    }
+
+html{
+        scroll-behavior: smooth; 
+    }
+
+body{
+        background: var(--black);
+        color: var(--white);
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+/*--Nav--*/
+
+nav{
+        position: fixed;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1160px, calc(100% - 24px));
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.8rem 1rem;
+        background: rgba(10,10,10,0.92);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+.nav-logo {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        background: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        flex-shrink: 0;
+    }
+
+.nav-links{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        list-style: none;
+        flex-wrap: nowrap;
+    }
+
+.nav-links li {
+        display: flex;
+        align-items: center;
+    }
+
+.nav-links a {
+        display: inline-flex;
+        align-items: center;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 0.45rem 0.65rem;
+        border-radius: 999px;
+        transition: color .2s, background-color .2s;
+    }
+
+.nav-links a:hover{ 
+        color: var(--white);
+        background: rgba(255,255,255,0.04);
+    }
+
+ /*--Hero--*/
+  #home {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 6%;
+    padding-top: 80px;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  #home::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+    top: -200px; right: -200px;
+    pointer-events: none;
+  }
+  .hero-text { z-index: 2; }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(59,130,246,0.4);
+    padding: 0.35rem 0.9rem;
+    border-radius: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+  }
+  .hero-name span {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-tagline {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--grad);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: opacity .2s, transform .2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+    transition: border-color .2s, transform .2s;
+    cursor: pointer;
+  }
+  .btn-outline:hover { border-color: var(--accent); transform: translateY(-2px); }
+ 
+  .hero-photo-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 420px;
+    z-index: 2;
+    position: relative;
+  }
+  .hero-photo-ring {
+    position: relative;
+    width: min(380px, 100%);
+    aspect-ratio: 4 / 5;
+    max-height: 480px;
+    border-radius: 60% 40% 55% 45% / 50% 45% 55% 50%;
+    padding: 4px;
+    background: var(--grad);
+    box-shadow: 0 20px 40px rgba(15,23,42,0.45);
+  }
+  .hero-photo-ring img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: inherit;
+    display: block;
+    filter: grayscale(8%);
+    background: #111827;
+  }
+  .hero-badge {
+    position: absolute;
+    bottom: 28px; left: -30px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.82rem; font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .hero-badge .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
+  }
+ 
+  /*--Section Shared--*/
+  section { padding: 6rem 6%; }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+  }
+  .section-sub {
+    color: var(--muted);
+    max-width: 520px;
+    font-size: 1rem;
+    margin-bottom: 3.5rem;
+  }
+  .divider {
+    width: 48px; height: 3px;
+    background: var(--grad);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+ 
+  /*--About--*/
+  #about { background: #0d0d18; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 5rem;
+    align-items: start;
+    justify-items: start;
+  }
+  .about-img-wrap {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 380px;
+    justify-self: start;
+    align-self: start;
+    margin-right: auto;
+    padding: 6px;
+    border-radius: 1.35rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.95), rgba(56,189,248,0.45), rgba(192,132,252,0.9));
+    box-shadow: 0 18px 40px rgba(15,23,42,0.45);
+  }
+  .about-img-wrap img {
+    width: 100%;
+    max-width: 360px;
+    height: 420px;
+    border-radius: 1.15rem;
+    display: block;
+    object-fit: cover;
+    object-position: center 18%;
+    filter: grayscale(4%) contrast(1.03) saturate(1.02);
+    margin: 0;
+    background: #121826;
+  }
+  .about-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 1.05rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.2rem 1.4rem;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+  .about-bio p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+ 
+  /* ── SKILLS ── */
+  #skills { background: var(--black); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.6rem;
+    transition: border-color .25s, transform .25s;
+  }
+  .skill-card:hover { border-color: var(--accent2); transform: translateY(-4px); }
+  .skill-icon {
+    width: 44px; height: 44px;
+    border-radius: 0.65rem;
+    background: rgba(99,102,241,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .skill-name {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  .skill-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+  .skill-bar-wrap { margin-top: 1rem; }
+  .skill-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    background: var(--grad);
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .skill-pct {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-align: right;
+    margin-top: 0.3rem;
+  }
+ 
+  /* ── PROJECTS ── */
+  #projects { background: #0d0d18; }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.8rem;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    transition: border-color .25s, transform .25s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-6px); }
+  .project-thumb {
+    height: 200px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--grad);
+    opacity: 0.08;
+  }
+  .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(59,130,246,0.12);
+    padding: 0.25rem 0.7rem;
+    border-radius: 2rem;
+  }
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+  }
+  .project-desc { color: var(--muted); font-size: 0.87rem; line-height: 1.65; flex: 1; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 1.2rem;
+    transition: gap .2s;
+  }
+  .project-link:hover { gap: 0.7rem; }
+ 
+  /* ── RESUME ── */
+  #resume {
+    background: var(--black);
+    text-align: center;
+  }
+  .resume-box {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 3rem;
+  }
+  .resume-icon {
+    font-size: 3rem;
+    margin-bottom: 1.2rem;
+  }
+  .resume-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+  }
+  .resume-box p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+ 
+  /* ── CONTACT ── */
+  #contact { background: #0d0d18; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .contact-info-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+  .contact-item {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    padding: 1.1rem 1.4rem;
+    transition: border-color .2s;
+  }
+  .contact-item:hover { border-color: var(--accent); }
+  .contact-item-icon {
+    width: 40px; height: 40px;
+    border-radius: 0.6rem;
+    background: rgba(99,102,241,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-item-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .contact-item-value { font-weight: 600; font-size: 0.95rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); letter-spacing: 0.05em; }
+  .form-input, .form-textarea {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    color: var(--white);
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 130px; }
+ 
+  /* ── FOOTER ── */
+  footer {
+    background: #050508;
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .footer-copy { color: var(--muted); font-size: 0.83rem; }
+  .footer-socials { display: flex; gap: 0.8rem; }
+  .footer-socials a {
+    width: 36px; height: 36px;
+    border-radius: 0.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: border-color .2s, color .2s;
+  }
+  .footer-socials a:hover { border-color: var(--accent); color: var(--accent); }
+ 
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    #home { grid-template-columns: 1fr; text-align: center; padding-top: 100px; }
+    .hero-cta { justify-content: center; }
+    .hero-photo-wrap { order: -1; }
+    .hero-photo-ring { width: 260px; height: 320px; }
+    .hero-badge { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-img-wrap { max-width: 300px; margin: 0 auto; }
+    .contact-grid { grid-template-columns: 1fr; }
+    nav { padding: 1rem 4%; }
+    .nav-links { display: none; }
+    section { padding: 4rem 5%; }
+    footer { justify-content: center; text-align: center; }
+  }
+
+
+
+
+
+</style>
+
+<body>
+
+<!--Nav-->
+    
+<nav> 
+
+    <div class="nav-logo">SHA.DEV</div>
+    
+    <ul class="nav-links">
+
+        <li> <a href="#home">Home</a> </li>
+        <li> <a href="#about">About</a> </li>
+        <li> <a href="#projects">Projects</a> </li>
+        <li> <a href="#resume">Resume</a> </li>
+        <li> <a href="#contact">Contact</a> </li>
+
+    </ul>
+
+</nav>
+
+<!--Hero-->
+
+<section id="home">
+
+    <div class="hero-text">
+        
+        <div class="hero-eyebrow"&#10024;> Available For Opportunities </div>
+        
+        <h1 class="hero-name">
+            
+            Safie<br><span>Ahamed</span>
+        
+        </h1>
+        
+        <p class="hero-tagline">
+
+            BCA (Bachelor of Computer Applications) specialized In (Multimedia &amp; Animation) Final Year Student - Building At The Creative Intersection Of Creative Design, Full-Stack Web Development, And Digital Storytelling. 
+
+        </p>
+
+        <div class="hero-cta">
+
+            <a href="#contact" class="btn-primary">Hire Me</a>
+            <a href="#projects" class="btn-outline">View More</a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-photo-wrap"> 
+
+        <div class="hero-photo-ring"> <img src="images/profile-pic-edited.png" alt="Safie Ahamed"></div>
+        
+        <div class="hero-badge">
+
+            <span class="dot"></span> 
+        
+            Open To Work
+        
+        </div>
+
+    </div>
+
+</section>
+
+<!--About-->
+
+<section id="about">
+
+    <div class="about-grid">
+
+            <div class="about-img-wrap">
+
+                <img src="images/portfolio-face-fit.png" alt="Safie Ahamed portrait"> 
+
+            </div>
+
+        <div>
+
+            <div class="section-label">About Me </div>
+
+            <div class="divided"></div>
+
+            <h2 class="section-title"> Creative Dev <br> Meets Tech Vision</h2>
+
+            <div class="about-bio">
+
+                <p>I'm Safie Ahamed — A Final-Year BCA (Bachelor of Computer Applications) Student Specializing In (Multimedia &amp; Animation) At Hindustan Institute Of Technology And Science (HITS), Chennai. I Bridge Creative Design And Modern Web Technology To Build Experiences That Actually Look Good.</p>
+                <p>With Hands-On Skills In HTML, CSS, JavaScript, React, Java, Python, Blender, And Grease Pencil 2D Animation, I've Worked On Everything From Dark-Themed Portfolios To E-Commerce Ad Campaigns. I'm Currently Building My MERN Stack Expertise And Targeting Industry Placements.</p>
+                <p>Competitive Gamer, Tech Addict, And  Someone Who Takes Freelance Seriously — I Bring That Same Drive To Every Project I Ship.</p>
+
+            </div>
+    
+            <div class="about-stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-num">4+</div>
+                    <div class="stat-table">Years Of Coding</div>
+
+                </div>
+            
+                <div class="stat-card">
+
+                    <div class="stat-num">1</div>
+                    <div class="stat-table">Project Shipped</div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-num">10</div>
+                    <div class="stat-table">Ad Video Pipeline</div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-num">2027</div>
+                    <div class="stat-table">Graduating Year</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--Skills-->
+
+<section id="skills">
+
+        <div class="section-label">What I Do</div>
+        <div class="divider"></div>
+        <h2 class="section-title">Skills &amp; Expertise</h2>
+        <p class="section-sub">A toolkit built across frontend engineering, creative design, and animation production.</p>
+        
+    <div class="skills-grid">
+
+        <div class="skill-card">
+                
+                <div class="skill-icon">⚡</div>
+                <div class="skill-name">Frontend Development</div>
+                <div class="skill-desc">HTML5, CSS3, JavaScript, React — building responsive, performant interfaces from scratch.</div>
+            
+            <div class="skill-bar-wrap">
+                
+                <div class="skill-bar-track">
+                    
+                    <div class="skill-bar-fill" style="width:82%"></div>
+                
+                </div>
+                
+                <div class="skill-pct">82%</div>
+        
+            </div>
+    
+        </div>
+
+        <div class="skill-card">
+
+                <div class="skill-icon">🎨</div>
+                <div class="skill-name">UI / UX Design</div>
+                <div class="skill-desc">Designing dark-themed, gaming-aesthetic interfaces. Strong visual instincts for layout and color.</div>
+        
+            <div class="skill-bar-wrap">
+            
+                <div class="skill-bar-track">
+                
+                    <div class="skill-bar-fill" style="width:75%"></div>
+            
+                </div>
+        
+                <div class="skill-pct">75%</div>
+        
+            </div>
+    
+        </div>
+
+        <div class="skill-card">
+
+                <div class="skill-icon">🧊</div>
+                <div class="skill-name">3D &amp; 2D Animation</div>
+                <div class="skill-desc">Blender, Grease Pencil — cinematic walk cycles, stickman animations, and 3D modelling.</div>
+
+            <div class="skill-bar-wrap">
+
+                <div class="skill-bar-track">
+            
+                    <div class="skill-bar-fill" style="width:70%"></div>
+            
+                </div>
+            
+                    <div class="skill-pct">70%</div>
+        
+            </div>
+    
+        </div>
+
+        <div class="skill-card">
+
+                <div class="skill-icon">🖥️</div>
+                <div class="skill-name">Java &amp; Python</div>
+                <div class="skill-desc">OOP fundamentals in Java, scripting and automation in Python including PDF generation with ReportLab.</div>
+      
+            <div class="skill-bar-wrap">
+        
+                <div class="skill-bar-track">
+                
+                    <div class="skill-bar-fill" style="width:65%"></div>
+            
+                </div>
+
+                <div class="skill-pct">65%</div>
+      
+            </div>
+    
+        </div>
+
+        <div class="skill-card">
+
+                <div class="skill-icon">🚀</div>
+                <div class="skill-name">MERN Stack (Learning)</div>
+                <div class="skill-desc">Actively building Node.js, Express, MongoDB skills — targeting full-stack job readiness by placement season.</div>
+
+            <div class="skill-bar-wrap">
+
+                <div class="skill-bar-track">
+                    
+                    <div class="skill-bar-fill" style="width:45%"></div>
+    
+                </div>
+        
+                <div class="skill-pct">45%</div>
+
+            </div>
+   
+        </div>
+
+        <div class="skill-card">
+
+                <div class="skill-icon">📱</div>
+                <div class="skill-name">Content &amp; Ad Production</div>
+                <div class="skill-desc">Managing 100-video ad campaigns on Higgsfield for Amazon UAE e-commerce products — UGC, unboxing, product review formats.</div>
+
+            <div class="skill-bar-wrap">
+
+                <div class="skill-bar-track">
+                    
+                    <div class="skill-bar-fill" style="width:78%"></div>
+    
+                </div>
+
+                <div class="skill-pct">78%</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--Projects-->
+
+<section id="projects">
+
+    <div class="section-label">Work</div>
+    <div class="divider"></div>
+    <h2 class="section-title">Featured Projects</h2>
+    <p class="section-sub">Things I've built — from personal tools to client campaigns.</p>
+
+    <div class="projects-grid">
+
+        <div class="project-card">
+
+                <div class="project-thumb">🎮</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">HTML/CSS/JS</span>
+                    <span class="tag">Portfolio</span>
+        
+                </div>
+
+                <div class="project-title">Dark Gaming Portfolio</div>
+                <p class="project-desc">Personal portfolio website with particle canvas background, 3D card tilt effect, custom animated cursor, and typewriter intro. First real front-end project shipped live.</p>
+                <a href="https://github.com/ahXmd" class="project-link" target="_blank">View on GitHub →</a>
+
+            </div>
+
+        </div>
+
+        <div class="project-card">
+
+                <div class="project-thumb">📦</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">Higgsfield AI</span>
+                    <span class="tag">Marketing</span>
+
+                </div>
+
+                <div class="project-title">RockSouq Amazon Ad Campaign</div>
+                <p class="project-desc">100-video UGC ad pipeline for two UAE charging products on Amazon. Formats include Street Interview, Unboxing, Product Review, and ASMR — generated via AI content factory workflow.</p>
+                <a href="#contact" class="project-link">Get in touch →</a>
+
+            </div>
+
+        </div>
+
+        <div class="project-card">
+
+                <div class="project-thumb">🦾</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">Blender</span>
+                    <span class="tag">Grease Pencil</span>
+
+                </div>
+
+                <div class="project-title">Cinematic Stickman Walk Cycle</div>
+                <p class="project-desc">2D animation in Blender Grease Pencil — a cinematic walk cycle with custom rigging and Blender 4.x API compatibility fixes. Explored professional animation workflows.</p>
+                <a href="#contact" class="project-link">See demo →</a>
+
+            </div>
+
+        </div>
+
+        <div class="project-card">
+
+                <div class="project-thumb">📄</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">Python</span>
+                    <span class="tag">ReportLab</span>
+
+                </div>
+
+                <div class="project-title">Internship Document Generator</div>
+                <p class="project-desc">Automated Word document templates with red placeholder fields for internship offer letters and completion certificates. Built for CodSoft internship documentation workflow.</p>
+                <a href="#contact" class="project-link">Learn more →</a>
+
+            </div>
+
+        </div>
+
+        <div class="project-card">
+
+                <div class="project-thumb">🌐</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+
+                </div>
+
+                <div class="project-title">MERN Stack App (In Progress)</div>
+                <p class="project-desc">Learning project following structured roadmap: JavaScript → Git → React → Node/Express → MongoDB. Targeting full-stack deployment before placement season 2026.</p>
+                <a href="https://github.com/ahXmd" class="project-link" target="_blank">Follow progress →</a>
+
+            </div>
+
+        </div>
+
+        <div class="project-card">
+
+                <div class="project-thumb">💡</div>
+
+            <div class="project-body">
+
+                <div class="project-tags">
+
+                    <span class="tag">HTML/CSS</span>
+                    <span class="tag">Freelance</span>
+
+                </div>
+
+                <div class="project-title">Freelance Landing Pages</div>
+                <p class="project-desc">Zero-investment freelance web projects for small businesses — custom landing pages with responsive design and SEO basics, targeting the Indian market.</p>
+                <a href="#contact" class="project-link">Discuss a project →</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--Resume-->
+<section id="resume">
+
+    <div class="section-label">Resume</div>
+    <div class="divider" style="margin: 0 auto 1rem;"></div>
+    <h2 class="section-title">Download My CV</h2>
+    <p class="section-sub" style="margin: 0 auto 3rem;">Get the full picture — skills, education, projects, and experience in one place.</p>
+  
+    <div class="resume-box">
+    
+        <div class="resume-icon">📋</div>
+        <h3>Safie Ahamed — Resume</h3>
+        <p>Final-Year BCA · Multimedia &amp; Animation · HITS Chennai<br>Frontend Dev · Animator · Content Creator</p>
+
+        <a href="Resume.pdf" download="Safie_Ahamed_CV.pdf" class="btn-primary" style="justify-content: center;">
+
+          ⬇ Download Resume PDF
+
+        </a>
+
+        <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.78rem;">PDF · Last updated June 2026</p>
+
+    </div>
+
+</section>
+
+<!--Contact-->
+
+<section id="contact">
+
+    <div class="section-label">Contact</div>
+    <div class="divider"></div>
+    <h2 class="section-title">Let's Work Together</h2>
+    <p class="section-sub">Open to internships, freelance projects, and full-time roles. Drop a message.</p>
+
+    <div class="contact-grid">
+
+        <div>
+
+            <ul class="contact-info-list">
+
+                <li class="contact-item">
+
+                    <div class="contact-item-icon">✉️</div>
+
+                    <div>
+
+                        <div class="contact-item-label">Email</div>
+                        <div class="contact-item-value">shafieahamath2000@email.com</div>
+                
+                    </div>
+
+                </li>
+
+                <li class="contact-item">
+
+                    <div class="contact-item-icon">📞</div>
+
+                    <div>
+
+                        <div class="contact-item-label">Phone</div>
+                        <div class="contact-item-value">+91 88070 04736</div>
+
+                    </div>
+
+                </li>
+
+                <li class="contact-item">
+
+                    <div class="contact-item-icon">📍</div>
+
+                    <div>
+
+                        <div class="contact-item-label">Location</div>
+                        <div class="contact-item-value">Chennai, Tamil Nadu, India</div>
+
+                    </div>
+
+                </li>
+
+                <li class="contact-item">
+
+                    <div class="contact-item-icon">🐙</div>
+
+                    <div>
+
+                        <div class="contact-item-label">GitHub</div>
+                        <div class="contact-item-value">github.com/ahXmd</div>
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="contact-form">
+
+            <div class="form-group">
+
+                <label class="form-label">Your Name</label>
+                <input class="form-input" type="text" placeholder="John Doe">
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">Email Address</label>
+                <input class="form-input" type="email" placeholder="john@example.com">
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" placeholder="Tell me about your project..."></textarea>
+
+            </div>
+
+            <button class="btn-primary">Send Message →</button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--Footer-->
+
+<footer>
+
+    <div class="footer-logo">Safie Ahamed</div>
+    <div class="footer-copy">© 2026 Safie Ahamed. All rights reserved.</div>
+    
+    <div class="footer-socials">
+
+        <a href="https://github.com/ahXmd" target="_blank" title="GitHub">🐙</a>
+        <a href="#" title="LinkedIn">💼</a>
+        <a href="#" title="Instagram">📸</a>
+        <a href="#" title="Twitter">🐦</a>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>
